@@ -1,0 +1,106 @@
+@font-face {
+  font-family: "UbuntuRegular", sans-serif;
+  src: local("UbuntuRegular"), url("./assets/fonts/Ubuntu-Regular.ttf");
+}
+
+* {
+  font-family: "UbuntuRegular", sans-serif;
+  margin: 0;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--green-crayola-pine);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+}
+
+@mixin customInputStyles {
+  border: none;
+  border-bottom: 1px solid var(--green-pine);
+  border-radius: 8px;
+  background-color: transparent;
+  outline: none;
+  color: var(--basic-black);
+  cursor: pointer;
+  transition: background-color 5000s ease-in-out 0s;
+
+  &:hover {
+    border-bottom: 2px solid var(--turquoise) !important;
+  }
+
+  &:focus {
+    border-bottom: 2px solid var(--turquoise) !important;
+  }
+
+  &::placeholder {
+    color: var(--basic-grey);
+  }
+
+  &:-webkit-autofill, &:-webkit-autofill:hover, &:-webkit-autofill:focus, &:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+  }
+}
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: 0.5s;
+
+  &:hover {
+    color: var(--turquoise);
+  }
+}
+
+button {
+  padding: 8px 10px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s ease;
+  box-shadow: 0 0 0 transparent;
+  font-size: 15px;
+
+  &:hover {
+    transition: 0.5s;
+    box-shadow: 0 5px 15px rgb(23, 93, 85);
+  }
+
+  &:disabled {
+    opacity: 0.2;
+  }
+}
+
+img {
+  background-color: grey;
+}
+
+input {
+  font-size: 15px;
+}
