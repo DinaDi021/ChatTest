@@ -1,0 +1,11 @@
+.env
+/server/node_modules
+/server/dist/
+/server/src/serviceAccount.json
+
+/client/node_modules
+/client/build
+/client/dist
+
+.idea
+ChatTest.iml
