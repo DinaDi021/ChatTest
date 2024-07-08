@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { userController } from "../controllers/user.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
 import { commonMiddleware } from "../middlewares/common.middleware";
 import { userMiddleware } from "../middlewares/user.middleware";
 import { UserValidator } from "../validators/user.validator";
@@ -16,6 +17,7 @@ router.get(
 
 router.patch(
   "/:userId",
+  authMiddleware.checkAccessToken,
   commonMiddleware.isIdValid("userId"),
   commonMiddleware.isBodyValid(UserValidator.update),
   userController.updateUser,
@@ -23,6 +25,7 @@ router.patch(
 
 router.delete(
   "/:userId",
+  authMiddleware.checkAccessToken,
   commonMiddleware.isIdValid("userId"),
   userController.deleteUser,
 );
