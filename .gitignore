@@ -1,7 +1,7 @@
 .env
 /server/node_modules
 /server/dist/
-/server/src/serviceAccount.json
+/server/serviceAccount.json
 
 /client/node_modules
 /client/build
