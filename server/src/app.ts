@@ -4,23 +4,26 @@ import http from "http";
 
 import { configs } from "./configs/configs";
 import { ApiError } from "./errors/api.error";
+import { userRouter } from "./routers/user.router";
 
 const app = express();
 const server = http.createServer(app);
+
+app.use("/users", userRouter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use((error: ApiError, req: Request, res: Response, next: NextFunction) => {
-    const status = error.status || 500;
+  const status = error.status || 500;
 
-    res.status(status).json({
-        message: error.message,
-        status: error.status,
-    });
+  res.status(status).json({
+    message: error.message,
+    status: error.status,
+  });
 });
 
 server.listen(configs.PORT, async () => {
-    console.log(`has started ${configs.PORT}`);
+  console.log(`has started ${configs.PORT}`);
 });
