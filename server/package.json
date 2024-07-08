@@ -12,13 +12,19 @@
   "description": "",
   "dependencies": {
     "@firebase/firestore-types": "^3.0.2",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "firebase": "^10.12.3",
-    "firebase-admin": "^12.2.0"
+    "firebase-admin": "^12.2.0",
+    "joi": "^17.13.3",
+    "nodemailer": "^6.9.14",
+    "nodemailer-express-handlebars": "^6.1.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.21",
+    "@types/nodemailer-express-handlebars": "^4.0.5",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-react-app": "^7.0.1",
