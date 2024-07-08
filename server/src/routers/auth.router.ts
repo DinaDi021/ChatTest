@@ -37,7 +37,7 @@ router.post(
 router.post(
   "/activate",
   authMiddleware.checkAccessToken,
-  authController.sendActivationToken,
+  authController.activate,
 );
 router.put("/activate", authController.activate);
 

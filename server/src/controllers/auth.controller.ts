@@ -108,22 +108,6 @@ class AuthController {
     }
   }
 
-  public async sendActivationToken(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<Response<void>> {
-    try {
-      const tokenPayload = req.res.locals.jwtPayload as ITokenPayload;
-
-      await authService.sendActivationToken(tokenPayload);
-
-      return res.sendStatus(204);
-    } catch (e) {
-      next(e);
-    }
-  }
-
   public async forgotPassword(req: Request, res: Response, next: NextFunction) {
     try {
       const user = req.res.locals;

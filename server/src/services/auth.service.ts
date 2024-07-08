@@ -136,33 +136,6 @@ class AuthService {
     }
   }
 
-  public async sendActivationToken(tokenPayload: ITokenPayload): Promise<void> {
-    try {
-      const user = await userRepository.getUserById(tokenPayload.userId);
-      if (user.emailVerified) {
-        throw new ApiError("User can not be activated", 403);
-      }
-
-      const actionToken = tokenService.generateActionToken(
-        {
-          userId: user.id,
-        },
-        EActionTokenType.activate,
-      );
-      await actionTokenRepository.create({
-        token: actionToken,
-        type: EActionTokenType.activate,
-        userId: user.id,
-      });
-      await emailService.sendMail(user.email, EEmailAction.REGISTER, {
-        name: user.firstName,
-        actionToken,
-      });
-    } catch (e) {
-      throw new ApiError(e.message, e.status);
-    }
-  }
-
   public async forgotPassword(user: IUser): Promise<void> {
     try {
       const actionToken = tokenService.generateActionToken(
