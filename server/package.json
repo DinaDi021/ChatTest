@@ -11,8 +11,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@firebase/firestore-types": "^3.0.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "firebase": "^10.12.3",
     "firebase-admin": "^12.2.0"
   },
   "devDependencies": {
