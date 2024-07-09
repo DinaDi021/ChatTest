@@ -1,31 +1,46 @@
 import { urls } from "../constants";
-import { IAuth, ITokens, IUser } from "../interfaces";
+import {
+  IAuth,
+  ITokens,
+  ITokensResponce,
+  IUser,
+  IUserResponse,
+} from "../interfaces";
 import { apiService, IRes } from "./apiServices";
 
-const accessTokenKey = "access";
-const refreshTokenKey = "refresh";
+const accessTokenKey = "accessToken";
+const refreshTokenKey = "refreshToken";
 
 const authService = {
   register(user: IAuth): IRes<IUser> {
     return apiService.post(urls.auth.register, user);
   },
-  async login(user: IAuth): Promise<IUser> {
-    const { data } = await apiService.post<ITokens>(urls.auth.login, user);
-    this.setTokens(data);
-    const { data: me } = await this.me();
-    return me;
+  async login(user: IAuth): Promise<IUserResponse> {
+    const response = await apiService.post<ITokensResponce>(
+      urls.auth.login,
+      user,
+    );
+    const tokens = response.data.data;
+    this.setTokens(tokens);
+    const userResponse = await this.me();
+    return userResponse;
   },
 
   async refresh(): Promise<void> {
     const refresh = this.getRefreshToken();
-    const { data } = await apiService.post<ITokens>(urls.auth.refresh, {
-      refresh,
-    });
-    this.setTokens(data);
+    const response = await apiService.post<{ data: ITokens }>(
+      urls.auth.refresh,
+      {
+        refresh,
+      },
+    );
+    const tokens = response.data.data;
+    this.setTokens(tokens);
   },
 
-  me(): IRes<IUser> {
-    return apiService.get(urls.auth.me);
+  async me(): Promise<IUserResponse> {
+    const response = await apiService.get(urls.auth.me);
+    return response.data;
   },
 
   async logout(): Promise<void> {
@@ -58,9 +73,10 @@ const authService = {
     });
   },
 
-  setTokens({ refresh, access }: ITokens): void {
-    localStorage.setItem(accessTokenKey, access);
-    localStorage.setItem(refreshTokenKey, refresh);
+  setTokens({ refreshToken, accessToken }: ITokens): void {
+    localStorage.setItem(accessTokenKey, accessToken);
+    localStorage.setItem(refreshTokenKey, refreshToken);
+    console.log("Tokens set:", accessToken, refreshToken);
   },
 
   getAccessToken(): string {
@@ -70,6 +86,7 @@ const authService = {
     return localStorage.getItem(refreshTokenKey);
   },
   deleteTokens(): void {
+    console.log("Deleting tokens");
     localStorage.removeItem(accessTokenKey);
     localStorage.removeItem(refreshTokenKey);
   },

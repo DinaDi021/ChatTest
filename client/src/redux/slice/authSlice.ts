@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 
-import { IAuth, IUser } from "../../interfaces";
+import { IAuth, IUser, IUserResponse } from "../../interfaces";
 import { authService } from "../../services";
 
 interface IState {
@@ -34,7 +34,7 @@ const register = createAsyncThunk<void, { user: IAuth }>(
   },
 );
 
-const login = createAsyncThunk<IUser, { user: IAuth }>(
+const login = createAsyncThunk<IUserResponse, { user: IAuth }>(
   "authSlice/login",
   async ({ user }, { rejectWithValue }) => {
     try {
@@ -130,7 +130,7 @@ const authSlice = createSlice({
   extraReducers: (builder) =>
     builder
       .addCase(login.fulfilled, (state, action) => {
-        state.me = action.payload;
+        state.me = action.payload.data;
       })
       .addCase(me.fulfilled, (state, action) => {
         state.me = action.payload;
@@ -155,6 +155,7 @@ const authActions = {
   ...actions,
   register,
   login,
+  me,
   logoutAll,
   logout,
   forgotPassword,

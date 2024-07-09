@@ -1,4 +1,8 @@
 export interface ITokens {
-  access: string;
-  refresh: string;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface ITokensResponce {
+  data: ITokens;
 }
