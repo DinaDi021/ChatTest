@@ -7,7 +7,6 @@ import {
   ForgotPasswordPage,
   LoginPage,
   NotFoundPage,
-  PersonalAccount,
   RegisterPage,
   ResetPasswordPage,
   UserInfoPage,
@@ -28,13 +27,7 @@ const router = createBrowserRouter([
       },
       {
         path: "me",
-        element: <PersonalAccount />,
-        children: [
-          {
-            path: "info",
-            element: <UserInfoPage />,
-          },
-        ],
+        element: <UserInfoPage />,
       },
       {
         path: "register",
