@@ -4,11 +4,9 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { MainLayout } from "./layout";
 import {
   ChatPage,
-  ForgotPasswordPage,
   LoginPage,
   NotFoundPage,
   RegisterPage,
-  ResetPasswordPage,
   UserInfoPage,
 } from "./pages";
 
@@ -33,14 +31,14 @@ const router = createBrowserRouter([
         path: "register",
         element: <RegisterPage />,
       },
-      {
-        path: "forgotPassword",
-        element: <ForgotPasswordPage />,
-      },
-      {
-        path: "resetPassword/:email/:token",
-        element: <ResetPasswordPage />,
-      },
+      // {
+      //   path: "forgotPassword",
+      //   element: <ForgotPasswordPage />,
+      // },
+      // {
+      //   path: "resetPassword",
+      //   element: <ResetPasswordPage />,
+      // },
       {
         path: "chat",
         element: <ChatPage />,
