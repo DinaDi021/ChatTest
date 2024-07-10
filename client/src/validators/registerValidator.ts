@@ -7,4 +7,15 @@ const setPasswordSchema = Joi.object({
   confirm_Password: Joi.any().valid(Joi.ref("password")).required(),
 });
 
-export { setPasswordSchema };
+const changePasswordSchema = Joi.object({
+  oldPassword: Joi.string().regex(regex.PASSWORD).trim(),
+  newPassword: Joi.string().regex(regex.PASSWORD).trim(),
+});
+
+const updateShema = Joi.object({
+  firstName: Joi.string().min(2).max(50).trim().optional(),
+  lastName: Joi.string().min(2).max(50).trim().optional(),
+  phoneNumber: Joi.string().regex(regex.PHONE_NUMBER).trim().optional(),
+});
+
+export { setPasswordSchema, updateShema, changePasswordSchema };
