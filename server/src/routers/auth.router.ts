@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { authController } from "../controllers/auth.controller";
-import { authMiddleware } from "../middlewares/auth.middleware";
+import { authMiddleware } from "../middlewares/auth.middlewares";
 import { commonMiddleware } from "../middlewares/common.middleware";
 import { userMiddleware } from "../middlewares/user.middleware";
 import { UserValidator } from "../validators/user.validator";
@@ -29,11 +29,7 @@ router.post(
 );
 
 router.post("/logout", authMiddleware.checkAccessToken, authController.logout);
-router.post(
-  "/logout-all",
-  authMiddleware.checkAccessToken,
-  authController.logoutAll,
-);
+
 router.post(
   "/activate",
   authMiddleware.checkAccessToken,
