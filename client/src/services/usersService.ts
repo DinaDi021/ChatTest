@@ -4,10 +4,10 @@ import { apiService, IRes } from "./apiServices";
 
 const usersService = {
   updateProfile: (
-    id: number,
+    id: string,
     params: IUpdateProfileParams,
   ): IRes<IUserResponse> => apiService.patch(urls.users.byId(id), params),
-  deleteProfile: (id: number): IRes<void> =>
+  deleteProfile: (id: string): IRes<void> =>
     apiService.delete(urls.users.byId(id)),
 };
 

@@ -3,6 +3,7 @@ import { AxiosError } from "axios";
 
 import { IUpdateProfileParams, IUser, IUserResponse } from "../../interfaces";
 import { usersService } from "../../services";
+import { authActions } from "./authSlice";
 import { progressActions } from "./progressSlice";
 
 interface IState {
@@ -15,13 +16,14 @@ const initialState: IState = {
 
 const updateUserById = createAsyncThunk<
   IUserResponse,
-  { id: number; params: IUpdateProfileParams }
+  { id: string; params: IUpdateProfileParams }
 >(
   "usersSlice/updateUserById",
   async ({ id, params }, { rejectWithValue, dispatch }) => {
     try {
       dispatch(progressActions.setIsLoading(true));
       const { data } = await usersService.updateProfile(id, params);
+      dispatch(authActions.setLoggedInUser(data.data));
       return data;
     } catch (e) {
       const err = e as AxiosError;
@@ -32,12 +34,13 @@ const updateUserById = createAsyncThunk<
   },
 );
 
-const deleteUserById = createAsyncThunk<void, { id: number }>(
+const deleteUserById = createAsyncThunk<void, { id: string }>(
   "usersSlice/deleteUserById",
   async ({ id }, { rejectWithValue, dispatch }) => {
     try {
       dispatch(progressActions.setIsLoading(true));
       await usersService.deleteProfile(id);
+      dispatch(authActions.resetUser());
     } catch (e) {
       const err = e as AxiosError;
       return rejectWithValue(err.response.data);
@@ -50,7 +53,14 @@ const deleteUserById = createAsyncThunk<void, { id: number }>(
 const usersSlice = createSlice({
   name: "usersSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    updateAuthUser: (state, action) => {
+      state.me = action.payload;
+    },
+    resetChangeInUser: (state) => {
+      state.me = null;
+    },
+  },
   extraReducers: (build) =>
     build
       .addCase(updateUserById.fulfilled, (state, action) => {
