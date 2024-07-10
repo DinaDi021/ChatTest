@@ -18,7 +18,7 @@ router.get(
 
 router.patch(
   "/:userId",
-    authMiddleware.checkAccessToken,
+  authMiddleware.checkAccessToken,
   commonMiddleware.isIdValid("userId"),
   commonMiddleware.isBodyValid(UserValidator.update),
   userController.updateUser,

@@ -9,7 +9,6 @@ class AuthMiddleware {
     res: Response,
     next: NextFunction,
   ) {
-    console.log(req.cookies);
     try {
       const accessToken = req.cookies.accessToken;
       if (!accessToken) {
