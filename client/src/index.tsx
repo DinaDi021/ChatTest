@@ -1,11 +1,12 @@
-import "./styles.scss";
+import "./index.scss";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
+import { PersistGate } from "redux-persist/integration/react";
 
-import { store } from "./redux";
+import { persistor, store } from "./redux";
 import { router } from "./router";
 
 const root = ReactDOM.createRoot(
@@ -13,6 +14,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <PersistGate persistor={persistor}>
+      <RouterProvider router={router} />
+    </PersistGate>
   </Provider>,
 );
