@@ -6,11 +6,13 @@ import { authService } from "./authService";
 
 type IRes<DATA> = Promise<AxiosResponse<DATA>>;
 
-const apiService = axios.create({ baseURL });
+const apiService = axios.create({
+  baseURL,
+  withCredentials: true,
+});
 
 apiService.interceptors.request.use((req) => {
   const access = authService.getAccessToken();
-
   if (access) {
     req.headers.Authorization = `Bearer ${access}`;
   }
