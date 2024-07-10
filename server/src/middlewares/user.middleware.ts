@@ -35,6 +35,26 @@ class UserMiddleware {
       next(e);
     }
   }
+
+  public async isUserExist() {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const user = await userRepository.getOneByEmail({
+          email: req.body.email,
+        });
+
+        if (!user) {
+          throw new ApiError("User not found", 404);
+        }
+
+        req.res.locals.user = user;
+
+        next();
+      } catch (e) {
+        next(e);
+      }
+    };
+  }
 }
 
 export const userMiddleware = new UserMiddleware();
