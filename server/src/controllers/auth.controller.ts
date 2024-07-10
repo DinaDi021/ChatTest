@@ -39,7 +39,7 @@ class AuthController {
       const { userId } = req.res.locals.jwtPayload as ITokenPayload;
       const user = await authService.getMe(userId);
 
-      res.json({ data: user });
+      res.json({ data: UserPresenter.present(user) });
     } catch (e) {
       next(e);
     }
@@ -110,7 +110,8 @@ class AuthController {
 
   public async forgotPassword(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = req.res.locals;
+      console.log(req.body);
+      const user = req.body;
       await authService.forgotPassword(user as IUser);
 
       res.sendStatus(200);
