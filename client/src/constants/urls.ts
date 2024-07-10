@@ -12,11 +12,12 @@ const urls = {
     logout: `${auth}/logout`,
     logoutAll: `${auth}/logout-all`,
     forgotPassword: `${auth}/forgot`,
+    setForgotPassword: (token: string): string => `${auth}/forgot/${token}`,
     changePassword: `${auth}/change`,
     activateAccount: `${auth}/activate`,
   },
   users: {
-    byId: (id: number): string => `${users}/${id}`,
+    byId: (id: string): string => `${users}/${id}`,
   },
 };
 
