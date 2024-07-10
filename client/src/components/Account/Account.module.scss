@@ -1,0 +1,28 @@
+.user {
+  &__container {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  &__emailVerification {
+    margin-bottom: 15px;
+  }
+}
+
+.changePasswordForm {
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s, opacity 0.5s;
+}
+
+.changePasswordForm.visible {
+  opacity: 1;
+  max-height: 200px;
+}
