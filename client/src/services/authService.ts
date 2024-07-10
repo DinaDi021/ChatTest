@@ -44,12 +44,12 @@ const authService = {
   },
 
   async logout(): Promise<void> {
-    await apiService.delete(urls.auth.logout);
+    await apiService.post(urls.auth.logout);
     this.deleteTokens();
   },
 
   async logoutAll(): Promise<void> {
-    await apiService.delete(urls.auth.logoutAll);
+    await apiService.post(urls.auth.logoutAll);
     this.deleteTokens();
   },
 
@@ -58,7 +58,7 @@ const authService = {
   },
 
   async setForgotPassword(token: string, newPassword: string): Promise<void> {
-    await apiService.put(urls.auth.forgotPassword, { token, newPassword });
+    await apiService.put(urls.auth.setForgotPassword(token), { newPassword });
   },
 
   async changePassword(
@@ -76,7 +76,6 @@ const authService = {
   setTokens({ refreshToken, accessToken }: ITokens): void {
     localStorage.setItem(accessTokenKey, accessToken);
     localStorage.setItem(refreshTokenKey, refreshToken);
-    console.log("Tokens set:", accessToken, refreshToken);
   },
 
   getAccessToken(): string {
@@ -86,7 +85,6 @@ const authService = {
     return localStorage.getItem(refreshTokenKey);
   },
   deleteTokens(): void {
-    console.log("Deleting tokens");
     localStorage.removeItem(accessTokenKey);
     localStorage.removeItem(refreshTokenKey);
   },
