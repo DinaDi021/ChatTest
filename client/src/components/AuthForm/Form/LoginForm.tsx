@@ -29,8 +29,10 @@ const LoginForm: FC = () => {
     <>
       <form className={styles.form__login} onSubmit={handleSubmit(login)}>
         <div className={styles.form__container}>
-          <label className={styles.form__label}>
+          <div className={styles.form__svg}>
             <EmailOutlinedIcon />
+          </div>
+          <label className={styles.form__label}>
             <input
               className={styles.form__input}
               type="email"
@@ -41,8 +43,10 @@ const LoginForm: FC = () => {
           </label>
         </div>
         <div className={styles.form__container}>
-          <label className={styles.form__label}>
+          <div className={styles.form__svg}>
             <LockOutlinedIcon />
+          </div>
+          <label className={styles.form__label}>
             <input
               className={styles.form__input}
               type="password"

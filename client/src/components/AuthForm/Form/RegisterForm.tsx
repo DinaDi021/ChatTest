@@ -22,11 +22,8 @@ const RegisterForm: FC = () => {
     } = await dispatch(authActions.register({ user }));
 
     if (requestStatus === "fulfilled") {
-      const loginResponse = await dispatch(authActions.login({ user }));
-      if (loginResponse.meta.requestStatus === "fulfilled") {
-        reset();
-        navigate("/me");
-      }
+      reset();
+      navigate("/login");
     }
   };
 
@@ -37,8 +34,10 @@ const RegisterForm: FC = () => {
         onSubmit={handleSubmit(registerUser)}
       >
         <div className={styles.form__container}>
-          <label className={styles.form__label}>
+          <div className={styles.form__svg}>
             <PersonRoundedIcon />
+          </div>
+          <label className={styles.form__label}>
             <input
               className={styles.form__input}
               type="text"
@@ -49,8 +48,10 @@ const RegisterForm: FC = () => {
           </label>
         </div>
         <div className={styles.form__container}>
-          <label className={styles.form__label}>
+          <div className={styles.form__svg}>
             <PersonRoundedIcon />
+          </div>
+          <label className={styles.form__label}>
             <input
               className={styles.form__input}
               type="text"
@@ -61,8 +62,10 @@ const RegisterForm: FC = () => {
           </label>
         </div>
         <div className={styles.form__container}>
-          <label className={styles.form__label}>
+          <div className={styles.form__svg}>
             <PhoneIphoneIcon />
+          </div>
+          <label className={styles.form__label}>
             <input
               className={styles.form__input}
               type="text"
@@ -73,8 +76,10 @@ const RegisterForm: FC = () => {
           </label>
         </div>
         <div className={styles.form__container}>
-          <label className={styles.form__label}>
+          <div className={styles.form__svg}>
             <EmailOutlinedIcon />
+          </div>
+          <label className={styles.form__label}>
             <input
               className={styles.form__input}
               type="email"
@@ -85,8 +90,10 @@ const RegisterForm: FC = () => {
           </label>
         </div>
         <div className={styles.form__container}>
-          <label className={styles.form__label}>
+          <div className={styles.form__svg}>
             <LockOutlinedIcon />
+          </div>
+          <label className={styles.form__label}>
             <input
               className={styles.form__input}
               type="password"
