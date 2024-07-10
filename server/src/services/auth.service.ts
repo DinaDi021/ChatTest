@@ -2,8 +2,6 @@ import { admin } from "../configs/firebase";
 import { EActionTokenType } from "../enums/actionTokenType";
 import { EEmailAction } from "../enums/email.action.enum";
 import { ApiError } from "../errors/api.error";
-import { actionTokenRepository } from "../repositories/actionToken.repository";
-import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
 import { ITokenPayload, ITokensPair } from "../types/token.types";
 import { IUser, IUserCredentials } from "../types/users.types";
@@ -12,7 +10,7 @@ import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
 
 class AuthService {
-  public async register(dto: IUser): Promise<IUser> {
+  public async register(dto: IUser, res: any): Promise<IUser> {
     try {
       const hashedPassword = await passwordService.hash(dto.password);
 
@@ -30,11 +28,9 @@ class AuthService {
         },
         EActionTokenType.activate,
       );
-      await actionTokenRepository.create({
-        token: actionToken,
-        type: EActionTokenType.activate,
-        userId: user.id,
-      });
+
+      tokenService.setActionTokenCookie(res, actionToken);
+
       await emailService.sendMail(dto.email, EEmailAction.REGISTER, {
         name: dto.firstName,
         actionToken,
@@ -46,7 +42,7 @@ class AuthService {
     }
   }
 
-  public async login(dto: IUserCredentials): Promise<ITokensPair> {
+  public async login(dto: IUserCredentials, res: any): Promise<ITokensPair> {
     try {
       const user = await userRepository.getOneByEmail({ email: dto.email });
       if (!user) {
@@ -64,7 +60,7 @@ class AuthService {
       const tokensPair = tokenService.generateTokenPair({
         userId: user.id,
       });
-      await tokenRepository.create({ ...tokensPair, userId: user.id });
+      tokenService.setTokenCookies(res, tokensPair);
 
       return tokensPair;
     } catch (e) {
@@ -76,21 +72,20 @@ class AuthService {
     return await userRepository.getUserById(userId);
   }
 
-  public async refresh(
-    payload: ITokenPayload,
-    refreshToken: string,
-  ): Promise<ITokensPair> {
+  public async refresh(payload: ITokenPayload, res: any): Promise<ITokensPair> {
     try {
+      res.cookie("refreshToken", "", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: new Date(1),
+      });
+
       const tokensPair = tokenService.generateTokenPair({
         userId: payload.userId,
       });
-      await Promise.all([
-        tokenRepository.create({
-          ...tokensPair,
-          userId: payload.userId,
-        }),
-        tokenRepository.deleteOne({ token: refreshToken }),
-      ]);
+
+      tokenService.setTokenCookies(res, tokensPair);
 
       return tokensPair;
     } catch (e) {
@@ -98,17 +93,21 @@ class AuthService {
     }
   }
 
-  public async logout(accessToken: string): Promise<void> {
+  public async logout(res: any): Promise<void> {
     try {
-      await tokenRepository.deleteOne({ token: accessToken });
-    } catch (e) {
-      throw new ApiError(e.message, e.status);
-    }
-  }
+      res.cookie("accessToken", "", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: new Date(1),
+      });
 
-  public async logoutAll(userId: string): Promise<void> {
-    try {
-      await tokenRepository.deleteManyByUserId(userId);
+      res.cookie("refreshToken", "", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: new Date(1),
+      });
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
@@ -120,23 +119,13 @@ class AuthService {
         token,
         EActionTokenType.activate,
       );
-      const entity = await actionTokenRepository.findOne({ token });
-      if (!entity) {
-        throw new ApiError("Not valid token", 400);
-      }
-      await Promise.all([
-        actionTokenRepository.deleteManyByUserIdAndType(
-          payload.userId,
-          EActionTokenType.activate,
-        ),
-        userRepository.setStatusForUser(payload.userId, true),
-      ]);
+      await userRepository.setStatusForUser(payload.userId, true);
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
   }
 
-  public async forgotPassword(user: IUser): Promise<void> {
+  public async forgotPassword(user: IUser, res: any): Promise<void> {
     try {
       const actionToken = tokenService.generateActionToken(
         {
@@ -145,16 +134,10 @@ class AuthService {
         EActionTokenType.forgotPassword,
       );
 
-      await Promise.all([
-        actionTokenRepository.create({
-          token: actionToken,
-          type: EActionTokenType.forgotPassword,
-          userId: user.id,
-        }),
-        emailService.sendMail(user.email, EEmailAction.FORGOT_PASSWORD, {
-          actionToken,
-        }),
-      ]);
+      tokenService.setActionTokenCookie(res, actionToken);
+      await emailService.sendMail(user.email, EEmailAction.FORGOT_PASSWORD, {
+        actionToken,
+      });
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
@@ -163,27 +146,19 @@ class AuthService {
   public async setForgotPassword(
     actionToken: string,
     newPassword: string,
+    res: any,
   ): Promise<void> {
     try {
       const payload = tokenService.checkActionToken(
         actionToken,
         EActionTokenType.forgotPassword,
       );
-      const entity = await actionTokenRepository.findOne({
-        token: actionToken,
-      });
-      if (!entity) {
-        throw new ApiError("Not valid token", 400);
-      }
 
       const newHashedPassword = await passwordService.hash(newPassword);
 
-      await Promise.all([
-        userRepository.updateOneById(payload.userId, {
-          password: newHashedPassword,
-        }),
-        actionTokenRepository.deleteOne({ token: actionToken }),
-      ]);
+      await userRepository.updateOneById(payload.userId, {
+        password: newHashedPassword,
+      });
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }

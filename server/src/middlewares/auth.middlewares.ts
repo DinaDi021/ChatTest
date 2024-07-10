@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
 import { ApiError } from "../errors/api.error";
-import { tokenRepository } from "../repositories/token.repository";
 import { tokenService } from "../services/token.service";
 
 class AuthMiddleware {
@@ -10,19 +9,14 @@ class AuthMiddleware {
     res: Response,
     next: NextFunction,
   ) {
+    console.log(req.cookies);
     try {
-      const tokenString = req.get("Authorization");
-      if (!tokenString) {
-        throw new ApiError("No token", 401);
+      const accessToken = req.cookies.accessToken;
+      if (!accessToken) {
+        throw new ApiError("No access token", 401);
       }
 
-      const accessToken = tokenString.split("Bearer ")[1];
       const jwtPayload = tokenService.checkToken(accessToken, "access");
-
-      const entity = await tokenRepository.findOne({ token: accessToken });
-      if (!entity) {
-        throw new ApiError("Token not valid!", 401);
-      }
 
       req.res.locals.jwtPayload = jwtPayload;
       req.res.locals.accessToken = accessToken;
@@ -38,18 +32,12 @@ class AuthMiddleware {
     next: NextFunction,
   ) {
     try {
-      const tokenString = req.get("Authorization");
-      if (!tokenString) {
-        throw new ApiError("No token", 401);
+      const refreshToken = req.cookies.refreshToken;
+      if (!refreshToken) {
+        throw new ApiError("No refresh token", 401);
       }
 
-      const refreshToken = tokenString.split("Bearer ")[1];
       const jwtPayload = tokenService.checkToken(refreshToken, "refresh");
-
-      const entity = await tokenRepository.findOne({ token: refreshToken });
-      if (!entity) {
-        throw new ApiError("Token not valid!", 401);
-      }
 
       req.res.locals.jwtPayload = jwtPayload;
       req.res.locals.refreshToken = refreshToken;

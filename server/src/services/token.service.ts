@@ -20,6 +20,33 @@ class TokenService {
     };
   }
 
+  public setTokenCookies(res: any, tokens: ITokensPair) {
+    const { accessToken, refreshToken } = tokens;
+
+    res.cookie("accessToken", accessToken, {
+      maxAge: 4 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV !== "development",
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: 20 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV !== "development",
+    });
+  }
+
+  public setActionTokenCookie(res: any, actionToken: string): void {
+    res.cookie("actionToken", actionToken, {
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV !== "development",
+    });
+  }
+
   public checkToken(token: string, type: "access" | "refresh"): ITokenPayload {
     try {
       let secret: string;

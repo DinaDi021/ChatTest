@@ -12,7 +12,7 @@ class AuthController {
     next: NextFunction,
   ): Promise<Response<IUser>> {
     try {
-      const createdUser = await authService.register(req.body);
+      const createdUser = await authService.register(req.body, res);
 
       return res.json({ data: UserPresenter.present(createdUser) });
     } catch (e) {
@@ -26,7 +26,7 @@ class AuthController {
     next: NextFunction,
   ): Promise<Response<ITokensPair>> {
     try {
-      const tokensPair = await authService.login(req.body);
+      const tokensPair = await authService.login(req.body, res);
 
       return res.json({ data: tokensPair });
     } catch (e) {
@@ -52,8 +52,7 @@ class AuthController {
   ): Promise<Response<ITokensPair>> {
     try {
       const tokenPayload = req.res.locals.jwtPayload as ITokenPayload;
-      const refreshToken = req.res.locals.refreshToken as string;
-      const tokensPair = await authService.refresh(tokenPayload, refreshToken);
+      const tokensPair = await authService.refresh(tokenPayload, res);
 
       return res.status(201).json({ data: tokensPair });
     } catch (e) {
@@ -67,24 +66,7 @@ class AuthController {
     next: NextFunction,
   ): Promise<Response<void>> {
     try {
-      const accessToken = req.res.locals.accessToken as string;
-      await authService.logout(accessToken);
-
-      return res.sendStatus(204);
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  public async logoutAll(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<Response<void>> {
-    try {
-      const jwtPayload = req.res.locals.jwtPayload as ITokenPayload;
-
-      await authService.logoutAll(jwtPayload.userId);
+      await authService.logout(res);
 
       return res.sendStatus(204);
     } catch (e) {
@@ -98,7 +80,7 @@ class AuthController {
     next: NextFunction,
   ): Promise<Response<void>> {
     try {
-      const actionToken = req.query.actionToken as string;
+      const actionToken = req.cookies.actionToken;
 
       await authService.activate(actionToken);
 
@@ -110,9 +92,8 @@ class AuthController {
 
   public async forgotPassword(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log(req.body);
       const user = req.body;
-      await authService.forgotPassword(user as IUser);
+      await authService.forgotPassword(user as IUser, res);
 
       res.sendStatus(200);
     } catch (e) {
@@ -127,8 +108,9 @@ class AuthController {
   ) {
     try {
       await authService.setForgotPassword(
-        req.params.token as string,
+        req.cookies.actionToken,
         req.body.newPassword,
+        res,
       );
 
       res.sendStatus(200);
