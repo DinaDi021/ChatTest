@@ -9,7 +9,7 @@ const useGetConversations = () => {
 
   useEffect(() => {
     dispatch(usersActions.getUsers());
-  }, []);
+  }, [dispatch]);
 
   return { users };
 };

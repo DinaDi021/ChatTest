@@ -9,6 +9,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 
     &__input {
       @include customInputStyles;
@@ -20,10 +21,6 @@
       &:hover, &:focus-visible {
         border: 1px solid lightslategrey;
       }
-    }
-
-    &__button {
-
     }
   }
 }

@@ -12,7 +12,6 @@ import {
   INewMessage,
 } from "../../interfaces/messageInterface";
 import { messagesService } from "../../services/messagesService";
-import { authActions } from "./authSlice";
 import { progressActions } from "./progressSlice";
 
 interface IState {
@@ -39,7 +38,6 @@ const getMessagesById = createAsyncThunk<
     try {
       dispatch(progressActions.setIsLoading(true));
       const { data } = await messagesService.getMessagesById(receiverId);
-      dispatch(authActions.setLoggedInUser(data.data));
       return data;
     } catch (e) {
       const err = e as AxiosError;
@@ -62,7 +60,6 @@ const sendMessageById = createAsyncThunk<
         receiverId,
         message,
       );
-      console.log(message, data);
       return data;
     } catch (e) {
       const err = e as AxiosError;

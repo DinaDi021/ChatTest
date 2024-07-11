@@ -31,6 +31,8 @@ const Account: FC = () => {
     resolver: joiResolver(updateShema),
   });
 
+  console.log(me);
+
   useEffect(() => {
     if (me) {
       setValue("firstName", firstName);
@@ -48,23 +50,6 @@ const Account: FC = () => {
       meta: { requestStatus },
     } = await dispatch(usersActions.deleteUserById({ id }));
 
-    if (requestStatus === "fulfilled") {
-      navigate("/login");
-    }
-  };
-
-  const logOut = async () => {
-    const {
-      meta: { requestStatus },
-    } = await dispatch(authActions.logout());
-    if (requestStatus === "fulfilled") {
-      navigate("/login");
-    }
-  };
-  const logOutAll = async () => {
-    const {
-      meta: { requestStatus },
-    } = await dispatch(authActions.logoutAll());
     if (requestStatus === "fulfilled") {
       navigate("/login");
     }
@@ -156,8 +141,6 @@ const Account: FC = () => {
             ? "Hide Change Password Form"
             : "Change password"}
         </button>
-        <button onClick={logOut}>Log out</button>
-        <button onClick={logOutAll}>Log out in All devices</button>
         <button onClick={deleteAccount}>Delete account</button>
       </div>
     </div>

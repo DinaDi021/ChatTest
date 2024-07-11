@@ -11,7 +11,6 @@ interface IProps {
 }
 
 const Conversation: FC<IProps> = ({ user }) => {
-  // const { id, messages, participants } = conversation;
   const { selectedUserChat } = useAppSelector((state) => state.users);
   const dispatch = useAppDispatch();
 

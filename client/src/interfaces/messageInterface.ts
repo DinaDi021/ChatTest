@@ -3,8 +3,14 @@ export interface IMessage {
   senderId: string;
   receiverId: string;
   message: string;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: {
+    _seconds: number;
+    _nanoseconds: number;
+  };
+  updatedAt: {
+    _seconds: number;
+    _nanoseconds: number;
+  };
 }
 
 export interface INewMessage {

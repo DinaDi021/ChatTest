@@ -6,7 +6,6 @@ import styles from "../pages.module.scss";
 
 const MainPage: FC = () => {
   const { me } = useAppSelector((state) => state.auth);
-
   if (!me) {
     return <div>You have to be auth</div>;
   }

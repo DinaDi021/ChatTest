@@ -7,11 +7,28 @@
     border-right: 1px solid lightslategrey;
   }
 
-  &__logout {
+  &__actionButton {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-around;
     padding: 0 10px;
     border-top: 1px solid lightslategrey;
+  }
+
+  &__searchError {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+
+
+
+    h4
+    {
+      padding: 15px;
+      background-color: var(--light-blue);
+      border-radius: 1rem;
+
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import SendIcon from "@mui/icons-material/Send";
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { messagesActions, usersActions } from "../../redux";
@@ -10,19 +10,18 @@ import { Messages } from "./Messages";
 const MessageContainer = () => {
   const { selectedUserChat } = useAppSelector((state) => state.users);
   const dispatch = useAppDispatch();
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState<string>("");
 
   useEffect(() => {
     dispatch(usersActions.resetSelectedChatWithUser());
   }, []);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newMessage) return;
     const payload = {
       message: newMessage,
     };
-    console.log("Sending message:", newMessage);
     await dispatch(
       messagesActions.sendMessageById({
         receiverId: selectedUserChat.id,
