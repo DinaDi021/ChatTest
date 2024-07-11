@@ -53,6 +53,26 @@
     justify-content: flex-end;
   }
 }
+
+.chat {
+  &__page {
+    display: flex;
+    height: 450px;
+    border-radius: 1rem;
+    overflow: hidden;
+    background-color: rgba(156, 163, 175, 0.4);
+    background-clip: padding-box;
+    backdrop-filter: blur(1rem);
+  }
+}
+
+@media (min-width: 768px) {
+  .chat {
+    &__page {
+      height: 550px;
+    }
+  }
+}
 //.wrap {
 //  display: flex;
 //}

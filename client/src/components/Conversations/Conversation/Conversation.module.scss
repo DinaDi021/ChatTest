@@ -1,0 +1,52 @@
+@import "../../../index";
+
+.conversation {
+  overflow: scroll;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+    height: 55px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: rgba(119, 136, 153, 0.3);
+    }
+  }
+
+  &__avatarContainer {
+    position: relative;
+  }
+
+  &__avatar {
+    @include customAvatarStyles;
+    width: 55px;
+    height: 55px;
+
+    &__dot {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        width: 10px;
+        height: 10px;
+        background-color: #7dc57e;
+        border-radius: 50%;
+        box-shadow: 0 5px 15px rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  &__div {
+    height: 100%;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    height: 100%;
+  }
+}

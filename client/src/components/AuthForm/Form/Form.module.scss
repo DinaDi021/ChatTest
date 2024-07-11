@@ -75,6 +75,8 @@
     @include customInputStyles;
     width: calc(100% - 40px);
     padding: 10px 20px;
+    border: 1px solid var(--deep-blue);
+    background-color: transparent;
   }
 
   &__success {

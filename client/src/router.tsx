@@ -3,8 +3,8 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { MainLayout } from "./layout";
 import {
-  ChatPage,
   LoginPage,
+  MainPage,
   NotFoundPage,
   RegisterPage,
   UserInfoPage,
@@ -17,7 +17,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to={"me"} />,
+        element: <Navigate to={"main"} />,
+      },
+      {
+        path: "main",
+        element: <MainPage />,
       },
       {
         path: "login",
@@ -39,10 +43,6 @@ const router = createBrowserRouter([
       //   path: "resetPassword",
       //   element: <ResetPasswordPage />,
       // },
-      {
-        path: "chat",
-        element: <ChatPage />,
-      },
     ],
   },
   {

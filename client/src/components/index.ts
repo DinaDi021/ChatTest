@@ -3,3 +3,7 @@ export * from "./Header";
 export * from "./AuthForm";
 export * from "./IsLoading";
 export * from "./Account";
+export * from "./Conversations";
+export * from "./Sidebar";
+export * from "./Messages";
+export * from "./Search";

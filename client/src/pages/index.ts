@@ -4,4 +4,4 @@ export * from "./AuthPage/RegisterPage";
 // export * from "./AuthPage/ForgotPasswordPage";
 // export * from "./AuthPage/ResetPasswordPage";
 export * from "./UserPage/UserInfoPage";
-export * from "./ChatPage/ChatPage";
+export * from "./MainPage/MainPage";

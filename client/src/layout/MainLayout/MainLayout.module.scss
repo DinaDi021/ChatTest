@@ -1,0 +1,12 @@
+.layout {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__outlet {
+    width: 850px;
+  }
+}

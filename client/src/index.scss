@@ -17,12 +17,12 @@
   margin: 0;
 
   &::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: var(--green-crayola-pine);
-    border-radius: 10px;
+    background-color: lightslategrey;
+    border-radius: 5px;
   }
 
   &::-webkit-scrollbar-corner {
@@ -30,14 +30,23 @@
   }
 }
 
+@mixin customAvatarStyles {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 20px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  background-color: lightslategrey;
+}
+
 @mixin customInputStyles {
-  border: 1px solid var(--deep-blue);
-  border-radius: 20px;
-  background-color: transparent;
+  border-radius: 9999px;
   outline: none;
   color: var(--basic-black);
   cursor: pointer;
-  transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 0.5s ease-in-out 0s;
 
   &:hover {
     border-color: white;
@@ -45,6 +54,7 @@
 
   &::placeholder {
     color: lightslategrey;
+    transition: color 0.5s ease;
   }
 
   &:-webkit-autofill, &:-webkit-autofill:hover, &:-webkit-autofill:focus, &:-webkit-autofill:active {
@@ -112,4 +122,7 @@ img {
 
 input {
   font-size: 15px;
+  &::placeholder {
+    transition: color 0.5s ease;
+  }
 }

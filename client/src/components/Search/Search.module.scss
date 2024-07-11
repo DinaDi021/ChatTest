@@ -1,0 +1,29 @@
+@import "../../index";
+
+.search {
+  &__container {
+    padding: 10px;
+    border-bottom: 1px solid lightslategrey;
+  }
+  &__form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__input {
+      @include customInputStyles;
+      padding: 10px 20px;
+      background-color: white;
+      border: 1px solid transparent;
+      transition: border 0.3s ease;
+
+      &:hover, &:focus-visible {
+        border: 1px solid lightslategrey;
+      }
+    }
+
+    &__button {
+
+    }
+  }
+}
