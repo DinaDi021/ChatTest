@@ -7,6 +7,7 @@ class MessageController {
   public async sendMessage(req: Request, res: Response, next: NextFunction) {
     try {
       const { message } = req.body;
+      console.log(message);
       const { id: receiverId } = req.params;
       const senderId = (req.res.locals.jwtPayload as ITokenPayload).userId;
       const newMessage = await messageService.sendMessage(

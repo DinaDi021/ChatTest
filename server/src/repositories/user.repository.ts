@@ -21,6 +21,15 @@ class UserRepository {
     await db.collection("users").doc(userId).delete();
   }
 
+  public async getAll(): Promise<IUser[]> {
+    const snapshot = await db.collection("users").get();
+    const users: IUser[] = [];
+    snapshot.forEach((doc) => {
+      users.push(doc.data() as IUser);
+    });
+    return users;
+  }
+
   public async register(dto: IUser): Promise<IUser> {
     const docRef = await db.collection("users").add(dto);
     dto.id = docRef.id;

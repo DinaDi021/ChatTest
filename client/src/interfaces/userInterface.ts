@@ -15,6 +15,9 @@ export interface IUser {
 export interface IUserResponse {
   data: IUser;
 }
+export interface IUsersResponse {
+  data: IUser[];
+}
 
 export interface IUpdateProfileParams {
   firstName?: string;

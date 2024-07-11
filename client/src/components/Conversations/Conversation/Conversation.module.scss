@@ -17,6 +17,10 @@
     }
   }
 
+  &__selected {
+    background-color: rgba(119, 136, 153, 0.3);
+  }
+
   &__avatarContainer {
     position: relative;
   }

@@ -51,6 +51,22 @@ class UserController {
       next(e);
     }
   }
+
+  public async getAll(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response<IUser[]>> {
+    try {
+      const users = await userService.getAll();
+
+      const presentedUsers = users.map((user) => UserPresenter.present(user));
+
+      return res.json({ data: presentedUsers });
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export const userController = new UserController();

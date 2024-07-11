@@ -17,6 +17,10 @@ class UserService {
     await userRepository.deleteUser(manageUserId);
   }
 
+  public async getAll(): Promise<IUser[]> {
+    return await userRepository.getAll();
+  }
+
   private checkUpdatePermission(userId: string, manageUserId: string): void {
     if (userId === manageUserId) {
       return;

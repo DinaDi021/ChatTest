@@ -6,3 +6,11 @@ export interface IMessage {
   createdAt: number;
   updatedAt: number;
 }
+
+export interface INewMessage {
+  message: string;
+}
+
+export interface IMessageResponse {
+  data: IMessage[];
+}

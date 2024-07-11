@@ -21,7 +21,7 @@ const LoginForm: FC = () => {
 
     if (requestStatus === "fulfilled") {
       reset();
-      navigate("/me");
+      navigate("/main");
     }
   };
 

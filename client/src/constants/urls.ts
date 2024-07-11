@@ -2,6 +2,7 @@ const baseURL = process.env.REACT_APP_API;
 
 const auth = "/auth";
 const users = "/users";
+const messages = "/messages";
 
 const urls = {
   auth: {
@@ -17,7 +18,12 @@ const urls = {
     activateAccount: `${auth}/activate`,
   },
   users: {
+    all: users,
     byId: (id: string): string => `${users}/${id}`,
+  },
+  messages: {
+    byId: (receiverId: string): string => `${messages}/${receiverId}`,
+    send: (receiverId: string): string => `${messages}/send/${receiverId}`,
   },
 };
 

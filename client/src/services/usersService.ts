@@ -1,8 +1,13 @@
 import { urls } from "../constants";
-import { IUpdateProfileParams, IUserResponse } from "../interfaces";
+import {
+  IUpdateProfileParams,
+  IUserResponse,
+  IUsersResponse,
+} from "../interfaces";
 import { apiService, IRes } from "./apiServices";
 
 const usersService = {
+  getUsers: (): IRes<IUsersResponse> => apiService.get(urls.users.all),
   updateProfile: (
     id: string,
     params: IUpdateProfileParams,
