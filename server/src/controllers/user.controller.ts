@@ -58,7 +58,8 @@ class UserController {
     next: NextFunction,
   ): Promise<Response<IUser[]>> {
     try {
-      const users = await userService.getAll();
+      const { userId: userId } = req.res.locals.jwtPayload;
+      const users = await userService.getAll(userId);
 
       const presentedUsers = users.map((user) => UserPresenter.present(user));
 

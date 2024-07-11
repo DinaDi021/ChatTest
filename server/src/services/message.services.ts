@@ -60,7 +60,10 @@ class MessageService {
         return [];
       }
 
-      return await messageRepository.findMessages(conversation.id);
+      const messages = await messageRepository.findMessages(conversation.id);
+      messages.sort((a, b) => a.createdAt.toMillis() - b.createdAt.toMillis());
+
+      return messages;
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
