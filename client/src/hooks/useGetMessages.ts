@@ -16,6 +16,6 @@ const useGetMessages = () => {
     }
   }, [dispatch, selectedUserChat]);
 
-  return { messages };
+  return { messages, dispatch };
 };
 export { useGetMessages };

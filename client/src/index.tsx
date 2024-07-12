@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 
+import { SocketContextProvider } from "./context/SocketContext";
 import { persistor, store } from "./redux";
 import { router } from "./router";
 
@@ -15,7 +16,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-      <RouterProvider router={router} />
+      <SocketContextProvider>
+        <RouterProvider router={router} />
+      </SocketContextProvider>
     </PersistGate>
   </Provider>,
 );

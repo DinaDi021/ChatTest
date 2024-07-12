@@ -8,6 +8,7 @@ import { AxiosError } from "axios";
 
 import {
   IMessage,
+  IMessageData,
   IMessageResponse,
   INewMessage,
 } from "../../interfaces/messageInterface";
@@ -16,17 +17,19 @@ import { progressActions } from "./progressSlice";
 
 interface IState {
   messages: IMessage[];
-  message: IMessage;
+  message: IMessageData;
   error: {
     email?: string[];
     message?: string;
   };
+  newMessage: INewMessage;
 }
 
 const initialState: IState = {
   messages: [],
   message: null,
   error: null,
+  newMessage: null,
 };
 
 const getMessagesById = createAsyncThunk<
@@ -49,13 +52,12 @@ const getMessagesById = createAsyncThunk<
 );
 
 const sendMessageById = createAsyncThunk<
-  IMessage,
+  IMessageData,
   { receiverId: string; message: INewMessage }
 >(
   "messagesSlice/sendMessageById",
-  async ({ receiverId, message }, { rejectWithValue, dispatch }) => {
+  async ({ receiverId, message }, { rejectWithValue }) => {
     try {
-      dispatch(progressActions.setIsLoading(true));
       const { data } = await messagesService.sendMessageById(
         receiverId,
         message,
@@ -64,8 +66,6 @@ const sendMessageById = createAsyncThunk<
     } catch (e) {
       const err = e as AxiosError;
       return rejectWithValue(err.response.data);
-    } finally {
-      dispatch(progressActions.setIsLoading(false));
     }
   },
 );
@@ -73,15 +73,19 @@ const sendMessageById = createAsyncThunk<
 const messagesSlice = createSlice({
   name: "messagesSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    setMessages: (state, action) => {
+      state.messages = action.payload;
+    },
+  },
   extraReducers: (build) =>
     build
       .addCase(getMessagesById.fulfilled, (state, action) => {
         state.messages = action.payload.data;
       })
       .addCase(sendMessageById.fulfilled, (state, action) => {
-        state.messages.push(action.payload);
         state.message = action.payload;
+        state.messages.push(action.payload.data);
       })
       .addMatcher(isRejected(), (state, action) => {
         state.error = action.payload;

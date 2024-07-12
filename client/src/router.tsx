@@ -2,13 +2,7 @@ import React from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { MainLayout } from "./layout";
-import {
-  LoginPage,
-  MainPage,
-  NotFoundPage,
-  RegisterPage,
-  UserInfoPage,
-} from "./pages";
+import { LoginPage, MainPage, NotFoundPage, RegisterPage } from "./pages";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +11,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to={"me"} />,
+        element: <Navigate to={"main"} />,
       },
       {
         path: "main",
@@ -26,10 +20,6 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <LoginPage />,
-      },
-      {
-        path: "me",
-        element: <UserInfoPage />,
       },
       {
         path: "register",

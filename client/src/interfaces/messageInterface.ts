@@ -13,6 +13,10 @@ export interface IMessage {
   };
 }
 
+export interface IMessageData {
+  data: IMessage;
+}
+
 export interface INewMessage {
   message: string;
 }

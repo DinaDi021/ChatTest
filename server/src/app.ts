@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import http from "http";
+import { Server } from "socket.io";
 
 import { configs } from "./configs/configs";
 import { ApiError } from "./errors/api.error";
@@ -11,18 +12,57 @@ import { userRouter } from "./routers/user.router";
 
 const app = express();
 const server = http.createServer(app);
+export const io = new Server(server, {
+  cors: {
+    origin: configs.FRONT_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  },
+});
 
-const corsOptions = {
-  origin: configs.FRONT_URL,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+app.use(
+  cors({
+    origin: configs.FRONT_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
+interface UserSocketMap {
+  [userId: string]: string;
+}
+
+export const getReceiverSocketId = (receiverId: string) => {
+  return userSocketMap[receiverId];
 };
+
+const userSocketMap: UserSocketMap = {};
+
+io.on("connection", (socket) => {
+  console.log("user connected", socket.id);
+
+  const userId = socket.handshake.query.userId as string;
+  console.log(userId);
+
+  if (userId !== undefined) {
+    userSocketMap[userId] = socket.id;
+  }
+
+  io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected", socket.id);
+
+    delete userSocketMap[userId];
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+  });
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors(corsOptions));
 
 app.use("/users", userRouter);
 app.use("/auth", authRouter);

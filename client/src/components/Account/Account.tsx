@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import css from "../../components/AuthForm/Form/Form.module.scss";
 import { useAppDispatch, useAppSelector, useToggle } from "../../hooks";
 import { IUpdateProfileParams } from "../../interfaces";
-import { authActions, usersActions } from "../../redux";
+import { usersActions } from "../../redux";
 import { updateShema } from "../../validators";
 import { ChangePasswordForm } from "../AuthForm";
 import styles from "./Account.module.scss";
@@ -30,8 +30,6 @@ const Account: FC = () => {
   } = useForm<IUpdateProfileParams>({
     resolver: joiResolver(updateShema),
   });
-
-  console.log(me);
 
   useEffect(() => {
     if (me) {

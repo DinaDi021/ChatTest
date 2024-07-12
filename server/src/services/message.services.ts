@@ -1,3 +1,4 @@
+import { getReceiverSocketId, io } from "../app";
 import { admin } from "../configs/firebase";
 import { ApiError } from "../errors/api.error";
 import { messageRepository } from "../repositories/message.repository";
@@ -39,6 +40,11 @@ class MessageService {
         conversationId,
         newMessage,
       );
+
+      const receiverSocketId = getReceiverSocketId(receiverId);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("newMessage", newMessage);
+      }
 
       return newMessage;
     } catch (e) {

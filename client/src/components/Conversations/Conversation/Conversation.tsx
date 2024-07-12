@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 
 import empty_person from "../../../assets/img/empty_person.png";
+import { useSocketContext } from "../../../context/SocketContext";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { IUser } from "../../../interfaces";
 import { usersActions } from "../../../redux";
@@ -13,6 +14,11 @@ interface IProps {
 const Conversation: FC<IProps> = ({ user }) => {
   const { selectedUserChat } = useAppSelector((state) => state.users);
   const dispatch = useAppDispatch();
+  const { onlineUsersId } = useSocketContext();
+  console.log("user.id:", user.id);
+  console.log("onlineUsers:", onlineUsersId);
+  const isOnline = onlineUsersId.includes(user.id);
+  console.log("isOnline:", isOnline);
 
   const selectUserChat = () => {
     dispatch(usersActions.selectedChatWithUser(user));
@@ -26,7 +32,9 @@ const Conversation: FC<IProps> = ({ user }) => {
         onClick={selectUserChat}
       >
         <div className={styles.conversation__avatarContainer}>
-          <span className={styles.conversation__avatar__dot}></span>
+          {isOnline && (
+            <span className={styles.conversation__avatar__dot}></span>
+          )}
           <img
             className={styles.conversation__avatar}
             src={empty_person}
@@ -38,7 +46,6 @@ const Conversation: FC<IProps> = ({ user }) => {
           <p>
             {user.firstName} {user.lastName}
           </p>
-          <span>last message</span>
         </div>
       </div>
     </>

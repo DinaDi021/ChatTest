@@ -14,18 +14,20 @@ const MessageInfo: FC<IProps> = ({ messageInfo }) => {
   const { message, createdAt, senderId } = messageInfo;
   const fromMe = senderId === me.id;
 
-  const createdAtDate = createdAt ? new Date(createdAt._seconds * 1000) : null;
+  let formattedDate: string | null = null;
+  let formattedTime: string | null = null;
 
-  const formattedTime = createdAtDate
-    ? createdAtDate.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-      })
-    : "Time not available";
+  if (createdAt) {
+    const createdAtDate = new Date(createdAt._seconds * 1000);
 
-  const formattedDate = createdAtDate
-    ? createdAtDate.toLocaleDateString("en-US")
-    : "Date not available";
+    formattedTime = createdAtDate.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+    });
+
+    formattedDate = createdAtDate.toLocaleDateString("en-US");
+  }
+
   return (
     <div
       className={`${styles.message__container} ${fromMe ? styles.message__container__fromMe : styles.message__container__fromOther}`}
@@ -46,7 +48,7 @@ const MessageInfo: FC<IProps> = ({ messageInfo }) => {
           <p>{message}</p>
         </div>
         <div className={styles.message__content__time}>
-          {formattedDate} {formattedTime}
+          {createdAt ? `${formattedDate} ${formattedTime}` : "now"}
         </div>
       </div>
     </div>

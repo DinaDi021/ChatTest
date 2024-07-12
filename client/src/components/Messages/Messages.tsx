@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef } from "react";
 
-import { useAppSelector, useGetMessages } from "../../hooks";
+import { useAppSelector, useGetMessages, useListenMessages } from "../../hooks";
 import { MessageInfo } from "./MessageInfo";
 import styles from "./MessageInfo/MessageInfo.module.scss";
 import { SkeletonMessages } from "./SkeletonMessages/SkeletonMessages";
@@ -8,12 +8,13 @@ import { SkeletonMessages } from "./SkeletonMessages/SkeletonMessages";
 const Messages: FC = () => {
   const { isLoading } = useAppSelector((state) => state.progress);
   const { messages } = useGetMessages();
+  useListenMessages();
 
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+      lastMessageRef.current.scrollIntoView({ behavior: "auto", block: "end" });
     }
   }, [messages]);
 
