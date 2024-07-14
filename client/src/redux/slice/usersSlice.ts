@@ -98,6 +98,22 @@ const deleteUserById = createAsyncThunk<void, { id: string }>(
   },
 );
 
+const deleteAvatar = createAsyncThunk<void, { id: string }>(
+  "usersSlice/deleteAvatar",
+  async ({ id }, { rejectWithValue, dispatch }) => {
+    try {
+      dispatch(progressActions.setIsLoading(true));
+      await usersService.deleteAvatar(id);
+      dispatch(authActions.setLoggedInUser({ avatar: null }));
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    } finally {
+      dispatch(progressActions.setIsLoading(false));
+    }
+  },
+);
+
 const usersSlice = createSlice({
   name: "usersSlice",
   initialState,
@@ -139,5 +155,6 @@ const usersActions = {
   addAvatar,
   updateUserById,
   deleteUserById,
+  deleteAvatar,
 };
 export { usersActions, usersReducer };

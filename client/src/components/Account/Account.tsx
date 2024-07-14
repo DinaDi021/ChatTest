@@ -57,11 +57,16 @@ const Account: FC = () => {
     }
   };
 
-  const addPhoto = async () => {
+  const addAvatar = async () => {
     const formData = new FormData();
     const file: Blob = fileInput.current.files[0];
     formData.append("avatar", file);
     await dispatch(usersActions.addAvatar({ id, data: formData }));
+    await dispatch(authActions.me());
+  };
+
+  const deleteAvatar = async () => {
+    await dispatch(usersActions.deleteAvatar({ id }));
     await dispatch(authActions.me());
   };
 
@@ -78,9 +83,10 @@ const Account: FC = () => {
           type={"file"}
           accept={"image/jpeg, image/png"}
           style={{ display: "none" }}
-          onChange={addPhoto}
+          onChange={addAvatar}
           ref={fileInput}
         />
+        <button onClick={deleteAvatar}>Del a</button>
         <form className={css.form__updateInfo} onSubmit={handleSubmit(update)}>
           <div className={css.form__container}>
             <div className={css.form__svg}>
