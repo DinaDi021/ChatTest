@@ -40,7 +40,8 @@
     }
 
     &__body {
-      overflow: scroll;
+      overflow-y: scroll;
+      overflow-x: hidden;
       height: 28rem;
     }
 
@@ -102,8 +103,8 @@
 
     &__error {
       position: absolute;
-      left: 65%;
-      top: 30%;
+      left: 32%;
+      top: 32%;
       color: darkred;
     }
   }
@@ -159,12 +160,16 @@
     }
 
     &__text {
-      width: 100%;
+      max-width: 100%;
       margin-bottom: 5px;
       display: flex;
       align-items: center;
       justify-content: flex-start;
       word-wrap: break-word;
+
+      p{
+        max-width: inherit;
+      }
     }
     &__time {
       font-size: 10px;

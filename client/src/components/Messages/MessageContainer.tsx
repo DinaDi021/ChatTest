@@ -12,13 +12,19 @@ const MessageContainer = () => {
   const { selectedUserChat } = useAppSelector((state) => state.users);
   const { error } = useAppSelector((state) => state.messages);
   const dispatch = useAppDispatch();
+  const [messageText, setMessageText] = useState<string>("");
+  const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 
   useEffect(() => {
     dispatch(usersActions.resetSelectedChatWithUser());
   }, []);
 
-  const [messageText, setMessageText] = useState<string>("");
-  const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
+  const resetError = () => {
+    if (error) {
+      dispatch(messagesActions.resetError());
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -69,7 +75,10 @@ const MessageContainer = () => {
                   className={styles.message__sent__input}
                   placeholder="Send a message"
                   value={messageText}
-                  onChange={(e) => setMessageText(e.target.value)}
+                  onChange={(e) => {
+                    setMessageText(e.target.value);
+                    resetError();
+                  }}
                 />
                 {error && (
                   <p className={styles.message__sent__error}>{error.message}</p>
@@ -80,7 +89,10 @@ const MessageContainer = () => {
                     type={"file"}
                     style={{ display: "none" }}
                     multiple
-                    onChange={(e) => setSelectedFiles(e.target.files)}
+                    onChange={(e) => {
+                      setSelectedFiles(e.target.files);
+                      resetError();
+                    }}
                   />
                   {selectedFiles && (
                     <span className={styles.fileCount}>

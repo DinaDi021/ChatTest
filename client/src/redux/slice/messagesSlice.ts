@@ -74,6 +74,9 @@ const messagesSlice = createSlice({
     setMessages: (state, action) => {
       state.messages = action.payload;
     },
+    resetError: (state) => {
+      state.error = null;
+    },
   },
   extraReducers: (build) =>
     build
