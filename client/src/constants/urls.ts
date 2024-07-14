@@ -25,6 +25,8 @@ const urls = {
   messages: {
     byId: (receiverId: string): string => `${messages}/${receiverId}`,
     send: (receiverId: string): string => `${messages}/send/${receiverId}`,
+    del: (conversationId: string, messageId: string): string =>
+      `${messages}/${conversationId}/${messageId}`,
   },
 };
 

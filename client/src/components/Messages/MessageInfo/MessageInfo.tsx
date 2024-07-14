@@ -1,9 +1,12 @@
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DescriptionIcon from "@mui/icons-material/Description";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import React, { FC } from "react";
 
 import empty from "../../../assets/img/empty_person.png";
-import { useAppSelector } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { IMessage } from "../../../interfaces/messageInterface";
+import { messagesActions } from "../../../redux";
 import { getUrl } from "../../../utils/getImagePath";
 import styles from "./MessageInfo.module.scss";
 
@@ -13,9 +16,12 @@ interface IProps {
 
 const MessageInfo: FC<IProps> = ({ messageInfo }) => {
   const { me } = useAppSelector((state) => state.auth);
-  const { message, createdAt, senderId, files } = messageInfo;
+  const { messageText, createdAt, senderId, conversationId, id, files } =
+    messageInfo;
   const userAvatar = me.avatar;
   const fromMe = senderId === me.id;
+
+  const dispatch = useAppDispatch();
 
   let formattedDate: string | null = null;
   let formattedTime: string | null = null;
@@ -31,10 +37,27 @@ const MessageInfo: FC<IProps> = ({ messageInfo }) => {
     formattedDate = createdAtDate.toLocaleDateString("en-US");
   }
 
+  const handleDeleteMessage = async () => {
+    dispatch(messagesActions.deleteMessage({ conversationId, messageId: id }));
+  };
+
   return (
     <div
       className={`${styles.message__container} ${fromMe ? styles.message__container__fromMe : styles.message__container__fromOther}`}
     >
+      <div
+        className={`${styles.actionButton} ${fromMe ? styles.message__actionButton__fromMe : styles.message__actionButton__fromOther}`}
+      >
+        <button
+          onClick={handleDeleteMessage}
+          style={{ padding: "5px", margin: "0" }}
+        >
+          <DeleteForeverIcon />
+        </button>
+        <button style={{ padding: "5px", margin: "0" }}>
+          <ModeEditIcon />
+        </button>
+      </div>
       <div
         className={`${styles.message__avatarContainer} ${fromMe ? styles.message__avatarContainer__fromMe : styles.message__avatarContainer__fromOther}`}
       >
@@ -47,20 +70,22 @@ const MessageInfo: FC<IProps> = ({ messageInfo }) => {
       <div
         className={`${styles.message__content} ${fromMe ? styles.message__content__fromMe : styles.message__content__fromOther}`}
       >
-        {files && (
-          <div className={styles.message__content__files}>
-            {files.map((file, index) => (
-              <a key={index} href={getUrl(file)} target="_blank">
-                <DescriptionIcon />
-              </a>
-            ))}
+        <div>
+          {files && (
+            <div className={styles.message__content__files}>
+              {files.map((file, index) => (
+                <a key={index} href={getUrl(file)} target="_blank">
+                  <DescriptionIcon />
+                </a>
+              ))}
+            </div>
+          )}
+          <div className={styles.message__content__text}>
+            <p>{messageText}</p>
           </div>
-        )}
-        <div className={styles.message__content__text}>
-          <p>{message}</p>
-        </div>
-        <div className={styles.message__content__time}>
-          {createdAt ? `${formattedDate} ${formattedTime}` : "now"}
+          <div className={styles.message__content__time}>
+            {createdAt ? `${formattedDate} ${formattedTime}` : "now"}
+          </div>
         </div>
       </div>
     </div>

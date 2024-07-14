@@ -33,7 +33,7 @@ const MessageContainer = () => {
     }
 
     const formData = new FormData();
-    formData.append("message", messageText);
+    formData.append("messageText", messageText);
     if (selectedFiles) {
       for (let i = 0; i < selectedFiles.length; i++) {
         formData.append("files", selectedFiles[i]);
@@ -71,7 +71,7 @@ const MessageContainer = () => {
             <form onSubmit={handleSubmit}>
               <div className={styles.message__sent__form}>
                 <textarea
-                  name="message"
+                  name="messageText"
                   className={styles.message__sent__input}
                   placeholder="Send a message"
                   value={messageText}

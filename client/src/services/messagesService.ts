@@ -10,6 +10,8 @@ const messagesService = {
     formData: FormData,
   ): IRes<IMessageData> =>
     apiService.post(urls.messages.send(receiverId), formData),
+  deleteMessage: (conversationId: string, messageId: string): IRes<void> =>
+    apiService.delete(urls.messages.del(conversationId, messageId)),
 };
 
 export { messagesService };

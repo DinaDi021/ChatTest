@@ -12,7 +12,7 @@ class MessageService {
   public async sendMessage(
     senderId: string,
     receiverId: string,
-    message?: string,
+    messageText?: string,
     files?: UploadedFile[] | UploadedFile,
   ): Promise<IMessage> {
     try {
@@ -37,18 +37,20 @@ class MessageService {
       const newMessage: IMessage = {
         senderId,
         receiverId,
+        conversationId: conversation.id,
         createdAt: admin.firestore.Timestamp.now(),
         updatedAt: admin.firestore.Timestamp.now(),
       };
 
-      if (message) {
-        newMessage.message = message;
+      if (messageText) {
+        newMessage.messageText = messageText;
       }
 
       if (fileUrls.length > 0) {
         newMessage.files = fileUrls;
       }
-      await messageRepository.addMessageToConversation(
+
+      newMessage.id = await messageRepository.addMessageToConversation(
         conversation.id,
         newMessage,
       );
@@ -78,7 +80,9 @@ class MessageService {
         return [];
       }
 
-      const messages = await messageRepository.findMessages(conversation.id);
+      const messages = await messageRepository.findMessagesInConversation(
+        conversation.id,
+      );
       messages.sort((a, b) => a.createdAt.toMillis() - b.createdAt.toMillis());
 
       return messages;
@@ -86,6 +90,23 @@ class MessageService {
       throw new ApiError(e.message, e.status);
     }
   }
+
+  public async deleteMessage(
+    conversationId: string,
+    messageId: string,
+    receiverId: string,
+    senderId: string,
+    userId: string,
+  ): Promise<void> {
+    this.checkUpdatePermission(userId, senderId);
+    await messageRepository.deleteMessage(conversationId, messageId);
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("deletedMessage", messageId);
+    }
+  }
+
   public async isConversationExist(
     senderId: string,
     receiverId: string,
@@ -127,6 +148,16 @@ class MessageService {
     );
 
     return fileUrls;
+  }
+
+  private checkUpdatePermission(userId: string, senderId: string): void {
+    if (userId === senderId) {
+      return;
+    }
+    throw new ApiError(
+      "You do not have permission to manage this message",
+      403,
+    );
   }
 }
 

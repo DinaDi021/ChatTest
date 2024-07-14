@@ -67,12 +67,35 @@ const sendMessageById = createAsyncThunk<
   },
 );
 
+const deleteMessage = createAsyncThunk<
+  void,
+  { conversationId: string; messageId: string }
+>(
+  "messagesSlice/deleteMessage",
+  async ({ conversationId, messageId }, { rejectWithValue, dispatch }) => {
+    try {
+      dispatch(progressActions.setIsLoading(true));
+      await messagesService.deleteMessage(conversationId, messageId);
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    } finally {
+      dispatch(progressActions.setIsLoading(false));
+    }
+  },
+);
+
 const messagesSlice = createSlice({
   name: "messagesSlice",
   initialState,
   reducers: {
     setMessages: (state, action) => {
       state.messages = action.payload;
+    },
+    resetMessages: (state, action) => {
+      state.messages = state.messages.filter(
+        (message) => message.id !== action.payload,
+      );
     },
     resetError: (state) => {
       state.error = null;
@@ -84,8 +107,12 @@ const messagesSlice = createSlice({
         state.messages = action.payload.data;
       })
       .addCase(sendMessageById.fulfilled, (state, action) => {
-        state.message = action.payload;
         state.messages.push(action.payload.data);
+      })
+      .addCase(deleteMessage.fulfilled, (state, action) => {
+        state.messages = state.messages.filter(
+          (message) => message.id !== action.meta.arg.messageId,
+        );
       })
       .addMatcher(isRejected(), (state, action) => {
         state.error = action.payload;
@@ -101,5 +128,6 @@ const messagesActions = {
   ...actions,
   getMessagesById,
   sendMessageById,
+  deleteMessage,
 };
 export { messagesActions, messagesReducer };

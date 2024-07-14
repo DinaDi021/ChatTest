@@ -32,7 +32,7 @@ class MessageRepository {
   public async addMessageToConversation(
     conversationId: string,
     message: IMessage,
-  ): Promise<void> {
+  ): Promise<string> {
     const messagesRef = db
       .collection("conversations")
       .doc(conversationId)
@@ -42,9 +42,12 @@ class MessageRepository {
       ...message,
       id: messageId,
     });
+    return messageId;
   }
 
-  public async findMessages(conversationId: string): Promise<IMessage[]> {
+  public async findMessagesInConversation(
+    conversationId: string,
+  ): Promise<IMessage[]> {
     const messagesRef = db
       .collection("conversations")
       .doc(conversationId)
@@ -54,6 +57,31 @@ class MessageRepository {
       (doc) => doc.data() as IMessage,
     );
     return messages;
+  }
+
+  public async getMessageById(
+    conversationId: string,
+    messageId: string,
+  ): Promise<IMessage | null> {
+    const messageDoc = await db
+      .collection("conversations")
+      .doc(conversationId)
+      .collection("messages")
+      .doc(messageId)
+      .get();
+    return messageDoc.data() as IMessage;
+  }
+
+  public async deleteMessage(
+    conversationId: string,
+    messageId: string,
+  ): Promise<void> {
+    await db
+      .collection("conversations")
+      .doc(conversationId)
+      .collection("messages")
+      .doc(messageId)
+      .delete();
   }
 }
 
