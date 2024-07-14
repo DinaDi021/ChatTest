@@ -99,6 +99,23 @@ class UserController {
       next(error);
     }
   }
+
+  public async deleteAvatar(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { userId } = req.res.locals.jwtPayload;
+      const { avatar } = res.locals;
+
+      await userService.deleteAvatar(req.params.userId, avatar, userId);
+
+      res.status(200).json({ message: "Avatar deleted successfully" });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const userController = new UserController();

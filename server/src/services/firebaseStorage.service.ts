@@ -33,7 +33,6 @@ class FirebaseStorageService {
     await uploadBytes(storageRef, file.data, {
       contentType: file.mimetype,
     });
-    console.log(filePath);
     return filePath;
   }
 

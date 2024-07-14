@@ -57,6 +57,16 @@ class UserService {
     return updatedUser;
   }
 
+  public async deleteAvatar(
+    manageUserId: string,
+    avatar: string,
+    userId: string,
+  ): Promise<void> {
+    this.checkUpdatePermission(userId, manageUserId);
+    await firebaseStorageService.deleteFile(avatar);
+    await userRepository.deleteAvatarField(manageUserId);
+  }
+
   private checkUpdatePermission(userId: string, manageUserId: string): void {
     if (userId === manageUserId) {
       return;

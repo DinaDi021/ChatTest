@@ -41,4 +41,11 @@ router.post(
   userController.uploadAvatar,
 );
 
+router.delete(
+  "/:userId/avatar",
+  authMiddleware.checkAccessToken,
+  fileMiddleware.isAvatarExist,
+  userController.deleteAvatar,
+);
+
 export const userRouter = router;

@@ -1,5 +1,8 @@
+import { firestore } from "firebase-admin";
+
 import { db } from "../configs/firebase";
 import { IUser } from "../types/users.types";
+import FieldValue = firestore.FieldValue;
 
 class UserRepository {
   public async getUserById(userId: string): Promise<IUser> {
@@ -56,6 +59,13 @@ class UserRepository {
     const userRef = db.collection("users").doc(userId);
     await userRef.update({
       status: status,
+    });
+  }
+
+  public async deleteAvatarField(userId: string): Promise<void> {
+    const userRef = db.collection("users").doc(userId);
+    await userRef.update({
+      avatar: FieldValue.delete(),
     });
   }
 }
