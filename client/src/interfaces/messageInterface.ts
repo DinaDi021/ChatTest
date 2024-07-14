@@ -2,7 +2,8 @@ export interface IMessage {
   id?: string;
   senderId: string;
   receiverId: string;
-  message?: string;
+  conversationId: string;
+  messageText?: string;
   files?: string[];
   createdAt: {
     _seconds: number;
@@ -19,7 +20,7 @@ export interface IMessageData {
 }
 
 export interface INewMessage {
-  message?: string;
+  messageText?: string;
   files?: FileList | File[];
 }
 

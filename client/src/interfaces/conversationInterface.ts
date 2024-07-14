@@ -1,7 +1,9 @@
+import { IMessage } from "./messageInterface";
+
 export interface IConversation {
   id?: string;
   participants: IParticipants;
-  messages: string[];
+  messages: IMessage[];
   createdAt: number;
   updatedAt?: number;
 }
