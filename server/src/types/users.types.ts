@@ -7,6 +7,7 @@ export interface IUser extends Document {
   email: string;
   phoneNumber: string;
   password: string;
+  avatar?: string;
   emailVerified: boolean;
   createdAt: admin.firestore.Timestamp;
 }

@@ -20,6 +20,7 @@ const urls = {
   users: {
     all: users,
     byId: (id: string): string => `${users}/${id}`,
+    addAvatar: (id: string) => `${users}/${id}/avatar`,
   },
   messages: {
     byId: (receiverId: string): string => `${messages}/${receiverId}`,

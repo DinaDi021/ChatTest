@@ -8,6 +8,8 @@ import { apiService, IRes } from "./apiServices";
 
 const usersService = {
   getUsers: (): IRes<IUsersResponse> => apiService.get(urls.users.all),
+  postAvatar: (id: string, data: FormData): IRes<IUserResponse> =>
+    apiService.post(urls.users.addAvatar(id), data),
   updateProfile: (
     id: string,
     params: IUpdateProfileParams,

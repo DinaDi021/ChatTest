@@ -38,8 +38,8 @@ class AuthController {
     try {
       const { userId } = req.res.locals.jwtPayload as ITokenPayload;
       const user = await authService.getMe(userId);
-
-      res.json({ data: UserPresenter.present(user) });
+      const presentedUser = await UserPresenter.present(user);
+      res.json({ data: presentedUser });
     } catch (e) {
       next(e);
     }

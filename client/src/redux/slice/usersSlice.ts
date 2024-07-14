@@ -42,6 +42,26 @@ const getUsers = createAsyncThunk<IUsersResponse>(
   },
 );
 
+const addAvatar = createAsyncThunk<
+  IUserResponse,
+  { id: string; data: FormData }
+>(
+  "usersSlice/addAvatar",
+  async ({ id, data }, { rejectWithValue, dispatch }) => {
+    try {
+      dispatch(progressActions.setIsLoading(true));
+      const response = await usersService.postAvatar(id, data);
+      dispatch(authActions.setLoggedInUser(response.data.data));
+      return response.data;
+    } catch (err) {
+      const e = err as AxiosError;
+      return rejectWithValue(e.response?.data);
+    } finally {
+      dispatch(progressActions.setIsLoading(false));
+    }
+  },
+);
+
 const updateUserById = createAsyncThunk<
   IUserResponse,
   { id: string; params: IUpdateProfileParams }
@@ -105,6 +125,9 @@ const usersSlice = createSlice({
       })
       .addCase(deleteUserById.fulfilled, (state) => {
         state.me = null;
+      })
+      .addCase(addAvatar.fulfilled, (state, action) => {
+        state.me = action.payload.data;
       }),
 });
 
@@ -113,6 +136,7 @@ const { reducer: usersReducer, actions } = usersSlice;
 const usersActions = {
   ...actions,
   getUsers,
+  addAvatar,
   updateUserById,
   deleteUserById,
 };

@@ -1,7 +1,7 @@
 import { IUser } from "../types/users.types";
 
 export class UserPresenter {
-  public static present(data: IUser) {
+  public static async present(data: IUser) {
     return {
       id: data.id,
       firstName: data.firstName,
@@ -10,6 +10,7 @@ export class UserPresenter {
       phoneNumber: data.phoneNumber,
       emailVerified: data.emailVerified,
       createdAt: data.createdAt,
+      avatar: data.avatar,
     };
   }
 }

@@ -1,6 +1,9 @@
+import { UploadedFile } from "express-fileupload";
+
 import { ApiError } from "../errors/api.error";
 import { userRepository } from "../repositories/user.repository";
 import { IUser } from "../types/users.types";
+import { EFileTypes, firebaseStorageService } from "./firebaseStorage.service";
 
 class UserService {
   public async updateUser(
@@ -21,6 +24,37 @@ class UserService {
     const users = await userRepository.getAll();
 
     return users.filter((user) => user.id !== userId);
+  }
+
+  public async uploadAvatar(
+    manageUserId: string,
+    avatar: UploadedFile,
+    userId: string,
+  ): Promise<IUser> {
+    this.checkUpdatePermission(userId, manageUserId);
+
+    let prevAvatarPath: string | null = null;
+
+    const currentUser = await userRepository.getUserById(manageUserId);
+    if (currentUser && currentUser.avatar) {
+      prevAvatarPath = currentUser.avatar;
+    }
+
+    const filePath = await firebaseStorageService.uploadFile(
+      avatar,
+      EFileTypes.User,
+      manageUserId,
+    );
+
+    if (prevAvatarPath) {
+      await firebaseStorageService.deleteFile(prevAvatarPath);
+    }
+
+    const updatedUser = await userRepository.updateOneById(manageUserId, {
+      avatar: filePath,
+    });
+
+    return updatedUser;
   }
 
   private checkUpdatePermission(userId: string, manageUserId: string): void {

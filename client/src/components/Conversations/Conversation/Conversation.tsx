@@ -1,10 +1,11 @@
 import React, { FC } from "react";
 
-import empty_person from "../../../assets/img/empty_person.png";
+import empty from "../../../assets/img/empty_person.png";
 import { useSocketContext } from "../../../context/SocketContext";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { IUser } from "../../../interfaces";
 import { usersActions } from "../../../redux";
+import { getAvatarUrl } from "../../../utils/getImagePath";
 import styles from "./Conversation.module.scss";
 
 interface IProps {
@@ -15,11 +16,8 @@ const Conversation: FC<IProps> = ({ user }) => {
   const { selectedUserChat } = useAppSelector((state) => state.users);
   const dispatch = useAppDispatch();
   const { onlineUsersId } = useSocketContext();
-  console.log("user.id:", user.id);
-  console.log("onlineUsers:", onlineUsersId);
   const isOnline = onlineUsersId.includes(user.id);
-  console.log("isOnline:", isOnline);
-
+  const userAvatar = user.avatar;
   const selectUserChat = () => {
     dispatch(usersActions.selectedChatWithUser(user));
   };
@@ -37,7 +35,7 @@ const Conversation: FC<IProps> = ({ user }) => {
           )}
           <img
             className={styles.conversation__avatar}
-            src={empty_person}
+            src={userAvatar ? getAvatarUrl(userAvatar) : empty}
             alt={user.id}
           />
         </div>

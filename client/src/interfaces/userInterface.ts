@@ -6,6 +6,7 @@ export interface IUser {
   phoneNumber: string;
   password: string;
   emailVerified: boolean;
+  avatar?: string;
   createdAt: {
     _seconds: number;
     _nanoseconds: number;

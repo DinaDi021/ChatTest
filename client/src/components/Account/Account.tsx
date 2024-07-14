@@ -1,21 +1,25 @@
 import { joiResolver } from "@hookform/resolvers/joi";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
+import empty from "../../assets/img/empty_person.png";
 import css from "../../components/AuthForm/Form/Form.module.scss";
 import { useAppDispatch, useAppSelector, useToggle } from "../../hooks";
 import { IUpdateProfileParams } from "../../interfaces";
-import { usersActions } from "../../redux";
+import { authActions, usersActions } from "../../redux";
+import { getAvatarUrl } from "../../utils/getImagePath";
 import { updateShema } from "../../validators";
 import { ChangePasswordForm } from "../AuthForm";
 import styles from "./Account.module.scss";
 
 const Account: FC = () => {
   const { me } = useAppSelector((state) => state.auth);
-  const { id, email, emailVerified, firstName, lastName, phoneNumber } = me;
+  const { id, email, emailVerified, firstName, lastName, phoneNumber, avatar } =
+    me;
+  const fileInput = useRef<HTMLInputElement>();
   const dispatch = useAppDispatch();
   const {
     value: isChangePasswordFormVisible,
@@ -53,9 +57,30 @@ const Account: FC = () => {
     }
   };
 
+  const addPhoto = async () => {
+    const formData = new FormData();
+    const file: Blob = fileInput.current.files[0];
+    formData.append("avatar", file);
+    await dispatch(usersActions.addAvatar({ id, data: formData }));
+    await dispatch(authActions.me());
+  };
+
   return (
     <div className={styles.user__container}>
       <div className={styles.user__container__info}>
+        <img
+          className={styles.user__container__avatar}
+          src={avatar ? getAvatarUrl(avatar) : empty}
+          alt={id}
+          onClick={() => fileInput.current.click()}
+        />
+        <input
+          type={"file"}
+          accept={"image/jpeg, image/png"}
+          style={{ display: "none" }}
+          onChange={addPhoto}
+          ref={fileInput}
+        />
         <form className={css.form__updateInfo} onSubmit={handleSubmit(update)}>
           <div className={css.form__container}>
             <div className={css.form__svg}>

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
 
 import { UserPresenter } from "../presenters/user.presenter";
 import { userService } from "../services/user.services";
@@ -20,7 +21,9 @@ class UserController {
         userId,
       );
 
-      res.status(200).json({ data: UserPresenter.present(user) });
+      const presentedUser = await UserPresenter.present(user);
+
+      res.status(200).json({ data: presentedUser });
     } catch (e) {
       next(e);
     }
@@ -46,7 +49,9 @@ class UserController {
     try {
       const user = req.res.locals as IUser;
 
-      return res.json({ data: UserPresenter.present(user) });
+      const presentedUser = await UserPresenter.present(user);
+
+      return res.json({ data: presentedUser });
     } catch (e) {
       next(e);
     }
@@ -61,11 +66,37 @@ class UserController {
       const { userId: userId } = req.res.locals.jwtPayload;
       const users = await userService.getAll(userId);
 
-      const presentedUsers = users.map((user) => UserPresenter.present(user));
+      const presentedUsers = await Promise.all(
+        users.map(async (user) => {
+          return await UserPresenter.present(user);
+        }),
+      );
 
       return res.json({ data: presentedUsers });
     } catch (e) {
       next(e);
+    }
+  }
+
+  public async uploadAvatar(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response> {
+    try {
+      const { userId } = req.res.locals.jwtPayload;
+      const avatar = req.files.avatar as UploadedFile;
+
+      const updatedUser = await userService.uploadAvatar(
+        req.params.userId,
+        avatar,
+        userId,
+      );
+      const presentedUser = await UserPresenter.present(updatedUser);
+
+      return res.json({ data: presentedUser });
+    } catch (error) {
+      next(error);
     }
   }
 }

@@ -1,6 +1,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
+import fileUpload from "express-fileupload";
 import http from "http";
 import { Server } from "socket.io";
 
@@ -9,6 +10,7 @@ import { ApiError } from "./errors/api.error";
 import { authRouter } from "./routers/auth.router";
 import { messageRouter } from "./routers/message.router";
 import { userRouter } from "./routers/user.router";
+import { UserSocketMap } from "./types/userSocketMap";
 
 const app = express();
 const server = http.createServer(app);
@@ -30,10 +32,6 @@ app.use(
   }),
 );
 
-interface UserSocketMap {
-  [userId: string]: string;
-}
-
 export const getReceiverSocketId = (receiverId: string) => {
   return userSocketMap[receiverId];
 };
@@ -44,8 +42,6 @@ io.on("connection", (socket) => {
   console.log("user connected", socket.id);
 
   const userId = socket.handshake.query.userId as string;
-  console.log(userId);
-
   if (userId !== undefined) {
     userSocketMap[userId] = socket.id;
   }
@@ -63,6 +59,7 @@ io.on("connection", (socket) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(fileUpload());
 
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
