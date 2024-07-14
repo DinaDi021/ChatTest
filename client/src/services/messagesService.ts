@@ -1,9 +1,5 @@
 import { urls } from "../constants";
-import {
-  IMessageData,
-  IMessageResponse,
-  INewMessage,
-} from "../interfaces/messageInterface";
+import { IMessageData, IMessageResponse } from "../interfaces/messageInterface";
 import { apiService, IRes } from "./apiServices";
 
 const messagesService = {
@@ -11,9 +7,9 @@ const messagesService = {
     apiService.get(urls.messages.byId(receiverId)),
   sendMessageById: (
     receiverId: string,
-    message: INewMessage,
+    formData: FormData,
   ): IRes<IMessageData> =>
-    apiService.post(urls.messages.send(receiverId), message),
+    apiService.post(urls.messages.send(receiverId), formData),
 };
 
 export { messagesService };

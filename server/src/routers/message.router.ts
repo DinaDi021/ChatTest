@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import { messageController } from "../controllers/message.controller";
 import { authMiddleware } from "../middlewares/auth.middlewares";
+import { fileMiddleware } from "../middlewares/files.middleware";
 
 const router = Router();
 
@@ -13,6 +14,7 @@ router.get(
 router.post(
   "/send/:id",
   authMiddleware.checkAccessToken,
+  fileMiddleware.isFileValid,
   messageController.sendMessage,
 );
 

@@ -1,5 +1,6 @@
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { messagesActions, usersActions } from "../../redux";
@@ -9,26 +10,40 @@ import { Messages } from "./Messages";
 
 const MessageContainer = () => {
   const { selectedUserChat } = useAppSelector((state) => state.users);
+  const { error } = useAppSelector((state) => state.messages);
   const dispatch = useAppDispatch();
-  const [newMessage, setNewMessage] = useState<string>("");
 
   useEffect(() => {
     dispatch(usersActions.resetSelectedChatWithUser());
   }, []);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const [messageText, setMessageText] = useState<string>("");
+  const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!newMessage) return;
-    const payload = {
-      message: newMessage,
-    };
-    await dispatch(
-      messagesActions.sendMessageById({
-        receiverId: selectedUserChat.id,
-        message: payload,
-      }),
-    );
-    setNewMessage("");
+
+    if (!messageText && !selectedFiles) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("message", messageText);
+    if (selectedFiles) {
+      for (let i = 0; i < selectedFiles.length; i++) {
+        formData.append("files", selectedFiles[i]);
+      }
+    }
+
+    if (selectedUserChat) {
+      await dispatch(
+        messagesActions.sendMessageById({
+          receiverId: selectedUserChat.id,
+          formData,
+        }),
+      );
+      setMessageText("");
+      setSelectedFiles(null);
+    }
   };
 
   return (
@@ -53,9 +68,27 @@ const MessageContainer = () => {
                   name="message"
                   className={styles.message__sent__input}
                   placeholder="Send a message"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
                 />
+                {error && (
+                  <p className={styles.message__sent__error}>{error.message}</p>
+                )}
+                <label className={styles.message__sent__svg}>
+                  <AttachFileIcon />
+                  <input
+                    type={"file"}
+                    style={{ display: "none" }}
+                    multiple
+                    onChange={(e) => setSelectedFiles(e.target.files)}
+                  />
+                  {selectedFiles && (
+                    <span className={styles.fileCount}>
+                      {selectedFiles.length}
+                    </span>
+                  )}
+                </label>
+
                 <button type="submit" className={styles.message__sent__button}>
                   <SendIcon />
                 </button>

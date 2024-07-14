@@ -5,7 +5,7 @@ import { useSocketContext } from "../../../context/SocketContext";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { IUser } from "../../../interfaces";
 import { usersActions } from "../../../redux";
-import { getAvatarUrl } from "../../../utils/getImagePath";
+import { getUrl } from "../../../utils/getImagePath";
 import styles from "./Conversation.module.scss";
 
 interface IProps {
@@ -35,7 +35,7 @@ const Conversation: FC<IProps> = ({ user }) => {
           )}
           <img
             className={styles.conversation__avatar}
-            src={userAvatar ? getAvatarUrl(userAvatar) : empty}
+            src={userAvatar ? getUrl(userAvatar) : empty}
             alt={user.id}
           />
         </div>

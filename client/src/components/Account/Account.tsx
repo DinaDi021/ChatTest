@@ -1,4 +1,5 @@
 import { joiResolver } from "@hookform/resolvers/joi";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import React, { FC, useEffect, useRef } from "react";
@@ -10,7 +11,7 @@ import css from "../../components/AuthForm/Form/Form.module.scss";
 import { useAppDispatch, useAppSelector, useToggle } from "../../hooks";
 import { IUpdateProfileParams } from "../../interfaces";
 import { authActions, usersActions } from "../../redux";
-import { getAvatarUrl } from "../../utils/getImagePath";
+import { getUrl } from "../../utils/getImagePath";
 import { updateShema } from "../../validators";
 import { ChangePasswordForm } from "../AuthForm";
 import styles from "./Account.module.scss";
@@ -75,7 +76,7 @@ const Account: FC = () => {
       <div className={styles.user__container__info}>
         <img
           className={styles.user__container__avatar}
-          src={avatar ? getAvatarUrl(avatar) : empty}
+          src={avatar ? getUrl(avatar) : empty}
           alt={id}
           onClick={() => fileInput.current.click()}
         />
@@ -86,7 +87,12 @@ const Account: FC = () => {
           onChange={addAvatar}
           ref={fileInput}
         />
-        <button onClick={deleteAvatar}>Del a</button>
+        <button
+          onClick={deleteAvatar}
+          className={styles.user__container__avatarButton}
+        >
+          <DeleteForeverIcon />
+        </button>
         <form className={css.form__updateInfo} onSubmit={handleSubmit(update)}>
           <div className={css.form__container}>
             <div className={css.form__svg}>

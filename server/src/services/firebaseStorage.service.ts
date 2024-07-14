@@ -13,6 +13,7 @@ import { storage } from "../configs/firebase";
 
 export enum EFileTypes {
   User = "user",
+  Message = "message",
 }
 
 class FirebaseStorageService {
@@ -36,28 +37,10 @@ class FirebaseStorageService {
     return filePath;
   }
 
-  public async uploadMultipleFiles(
-    files: UploadedFile[],
-    itemType: EFileTypes,
-    itemId: string,
-  ): Promise<string[]> {
-    const filePaths = await Promise.all(
-      files.map((file) => this.uploadFile(file, itemType, itemId)),
-    );
-    return filePaths;
-  }
-
   public async getFileURL(filePath: string): Promise<string> {
     const storageRef = ref(this.storage, filePath);
     const url = await getDownloadURL(storageRef);
     return url;
-  }
-
-  public async getMultipleFileURLs(filePaths: string[]): Promise<string[]> {
-    const urls = await Promise.all(
-      filePaths.map((filePath) => this.getFileURL(filePath)),
-    );
-    return urls;
   }
 
   public async deleteFile(fileKey: string): Promise<void> {

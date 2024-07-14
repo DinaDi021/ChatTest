@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
 
-import { imageConfig } from "../configs/file.config";
+import { getConfigForMimeType, imageConfig } from "../configs/file.config";
 import { ApiError } from "../errors/api.error";
 import { userRepository } from "../repositories/user.repository";
 
@@ -34,7 +35,11 @@ class FilesMiddleware {
     }
   }
 
-  isAvatarExist = async (req: Request, res: Response, next: NextFunction) => {
+  public async isAvatarExist(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { userId } = req.params;
       const user = await userRepository.getUserById(userId);
@@ -47,7 +52,44 @@ class FilesMiddleware {
     } catch (error) {
       next(error);
     }
-  };
+  }
+
+  public async isFileValid(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      if (!req.files) {
+        req.files = {};
+        next();
+        return;
+      }
+
+      const files = Array.isArray(req.files.files)
+        ? req.files.files
+        : [req.files.files];
+
+      await Promise.all(
+        files.map(async (file: UploadedFile) => {
+          const { size, mimetype } = file;
+
+          const config = getConfigForMimeType(mimetype);
+          if (!config) {
+            throw new ApiError("Unsupported file type", 400);
+          }
+
+          if (size > config.MAX_SIZE) {
+            throw new ApiError("File is too big", 400);
+          }
+        }),
+      );
+
+      next();
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export const fileMiddleware = new FilesMiddleware();

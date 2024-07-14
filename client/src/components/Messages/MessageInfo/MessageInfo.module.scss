@@ -54,10 +54,10 @@
       align-items: center;
       background-color: rgba(119, 136, 153, 0.3);
       height: calc(70px - 10px);
-
     }
+
     &__input {
-      width: 80%;
+      width: 77%;
       outline: none;
       background-color: transparent;
       border: none;
@@ -78,9 +78,33 @@
       }
     }
 
+    &__svg {
+      cursor: pointer;
+      position: absolute;
+      right: 12%;
+      transition: transform 0.7s;
+
+      &:hover{
+        transform: scale(1.1);
+      }
+
+      svg{
+        width: 30px;
+        height: 30px;
+        color: white;
+      }
+    }
+
     &__button {
       position: absolute;
       right: 15px;
+    }
+
+    &__error {
+      position: absolute;
+      left: 65%;
+      top: 30%;
+      color: darkred;
     }
   }
 

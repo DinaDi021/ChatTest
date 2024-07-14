@@ -2,7 +2,8 @@ export interface IMessage {
   id?: string;
   senderId: string;
   receiverId: string;
-  message: string;
+  message?: string;
+  files?: string[];
   createdAt: {
     _seconds: number;
     _nanoseconds: number;
@@ -18,7 +19,8 @@ export interface IMessageData {
 }
 
 export interface INewMessage {
-  message: string;
+  message?: string;
+  files?: FileList | File[];
 }
 
 export interface IMessageResponse {

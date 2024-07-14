@@ -21,11 +21,13 @@ const Messages: FC = () => {
   return (
     <>
       {isLoading ? (
-        [...Array(3)].map((_, idx) => <SkeletonMessages key={idx} />)
+        [...Array(3)].map((_, idx) => (
+          <SkeletonMessages key={`skeleton-${idx}`} />
+        ))
       ) : messages.length > 0 ? (
         messages.map((messageInfo, index) => (
           <div
-            key={messageInfo.id}
+            key={`${messageInfo.id}-${index}`}
             ref={index === messages.length - 1 ? lastMessageRef : null}
           >
             <MessageInfo messageInfo={messageInfo} />

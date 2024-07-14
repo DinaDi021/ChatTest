@@ -1,8 +1,10 @@
+import DescriptionIcon from "@mui/icons-material/Description";
 import React, { FC } from "react";
 
-import empty_person from "../../../assets/img/empty_person.png";
+import empty from "../../../assets/img/empty_person.png";
 import { useAppSelector } from "../../../hooks";
 import { IMessage } from "../../../interfaces/messageInterface";
+import { getUrl } from "../../../utils/getImagePath";
 import styles from "./MessageInfo.module.scss";
 
 interface IProps {
@@ -11,7 +13,8 @@ interface IProps {
 
 const MessageInfo: FC<IProps> = ({ messageInfo }) => {
   const { me } = useAppSelector((state) => state.auth);
-  const { message, createdAt, senderId } = messageInfo;
+  const { message, createdAt, senderId, files } = messageInfo;
+  const userAvatar = me.avatar;
   const fromMe = senderId === me.id;
 
   let formattedDate: string | null = null;
@@ -37,13 +40,22 @@ const MessageInfo: FC<IProps> = ({ messageInfo }) => {
       >
         <img
           alt="{senderId}"
-          src={empty_person}
+          src={userAvatar ? getUrl(userAvatar) : empty}
           className={styles.message__avatar}
         />
       </div>
       <div
         className={`${styles.message__content} ${fromMe ? styles.message__content__fromMe : styles.message__content__fromOther}`}
       >
+        {files && (
+          <div className={styles.message__content__files}>
+            {files.map((file, index) => (
+              <a key={index} href={getUrl(file)} target="_blank">
+                <DescriptionIcon />
+              </a>
+            ))}
+          </div>
+        )}
         <div className={styles.message__content__text}>
           <p>{message}</p>
         </div>

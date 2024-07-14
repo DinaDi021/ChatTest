@@ -10,7 +10,6 @@ import {
   IMessage,
   IMessageData,
   IMessageResponse,
-  INewMessage,
 } from "../../interfaces/messageInterface";
 import { messagesService } from "../../services/messagesService";
 import { progressActions } from "./progressSlice";
@@ -22,14 +21,12 @@ interface IState {
     email?: string[];
     message?: string;
   };
-  newMessage: INewMessage;
 }
 
 const initialState: IState = {
   messages: [],
   message: null,
   error: null,
-  newMessage: null,
 };
 
 const getMessagesById = createAsyncThunk<
@@ -53,14 +50,14 @@ const getMessagesById = createAsyncThunk<
 
 const sendMessageById = createAsyncThunk<
   IMessageData,
-  { receiverId: string; message: INewMessage }
+  { receiverId: string; formData: FormData }
 >(
   "messagesSlice/sendMessageById",
-  async ({ receiverId, message }, { rejectWithValue }) => {
+  async ({ receiverId, formData }, { rejectWithValue }) => {
     try {
       const { data } = await messagesService.sendMessageById(
         receiverId,
-        message,
+        formData,
       );
       return data;
     } catch (e) {

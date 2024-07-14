@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
 
 import { messageService } from "../services/message.services";
 import { ITokenPayload } from "../types/token.types";
@@ -7,12 +8,14 @@ class MessageController {
   public async sendMessage(req: Request, res: Response, next: NextFunction) {
     try {
       const { message } = req.body;
+      const files = req.files.files as UploadedFile[];
       const { id: receiverId } = req.params;
       const senderId = (req.res.locals.jwtPayload as ITokenPayload).userId;
       const newMessage = await messageService.sendMessage(
         senderId,
         receiverId,
         message,
+        files,
       );
       res.status(201).json({ data: newMessage });
     } catch (e) {
