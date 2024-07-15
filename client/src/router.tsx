@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { MainLayout } from "./layout";
 import {
+  ActivateEmailPage,
   ForgotPasswordPage,
   LoginPage,
   MainPage,
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "main",
         element: <MainPage />,
+      },
+      {
+        path: "activate/:actionToken",
+        element: <ActivateEmailPage />,
       },
       {
         path: "login",

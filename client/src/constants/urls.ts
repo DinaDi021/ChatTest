@@ -15,7 +15,8 @@ const urls = {
     forgotPassword: `${auth}/forgot`,
     setForgotPassword: (token: string): string => `${auth}/forgot/${token}`,
     changePassword: `${auth}/change`,
-    activateAccount: `${auth}/activate`,
+    activateAccount: (actionToken: string): string =>
+      `${auth}/activate/${actionToken}`,
   },
   users: {
     all: users,

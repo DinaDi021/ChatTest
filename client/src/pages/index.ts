@@ -5,3 +5,4 @@ export * from "./AuthPage/ForgotPasswordPage";
 export * from "./AuthPage/ResetPasswordPage";
 export * from "./UserPage/UserInfoPage";
 export * from "./MainPage/MainPage";
+export * from "./AuthPage/ActivateEmailPage";

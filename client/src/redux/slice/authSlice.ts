@@ -86,6 +86,7 @@ const forgotPassword = createAsyncThunk<void, { email: string }>(
     }
   },
 );
+
 const setForgotPassword = createAsyncThunk<
   void,
   { token: string; newPassword: string }
@@ -94,6 +95,18 @@ const setForgotPassword = createAsyncThunk<
   async ({ token, newPassword }, { rejectWithValue }) => {
     try {
       await authService.setForgotPassword(token, newPassword);
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
+const activateEmail = createAsyncThunk<void, { actionToken: string }>(
+  "authSlice/activateEmail",
+  async ({ actionToken }, { rejectWithValue }) => {
+    try {
+      await authService.activateEmail(actionToken);
     } catch (e) {
       const err = e as AxiosError;
       return rejectWithValue(err.response.data);
@@ -160,6 +173,7 @@ const authActions = {
   logout,
   forgotPassword,
   setForgotPassword,
+  activateEmail,
   changePassword,
 };
 

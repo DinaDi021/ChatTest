@@ -58,7 +58,7 @@ class UserRepository {
   ): Promise<void> {
     const userRef = db.collection("users").doc(userId);
     await userRef.update({
-      status: status,
+      emailVerified: status,
     });
   }
 

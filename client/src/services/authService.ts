@@ -58,7 +58,7 @@ const authService = {
   },
 
   async setForgotPassword(token: string, newPassword: string): Promise<void> {
-    await apiService.put(urls.auth.setForgotPassword(token), { newPassword });
+    await apiService.put(urls.auth.forgotPassword, { token, newPassword });
   },
 
   async changePassword(
@@ -71,6 +71,10 @@ const authService = {
       oldPassword,
       newPassword,
     });
+  },
+
+  async activateEmail(actionToken: string): Promise<void> {
+    await apiService.put(urls.auth.activateAccount(actionToken));
   },
 
   setTokens({ refreshToken, accessToken }: ITokens): void {
