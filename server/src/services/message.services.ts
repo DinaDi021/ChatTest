@@ -1,12 +1,12 @@
-import {UploadedFile} from "express-fileupload";
+import { UploadedFile } from "express-fileupload";
 
-import {getReceiverSocketId, io} from "../app";
-import {admin} from "../configs/firebase";
-import {ApiError} from "../errors/api.error";
-import {messageRepository} from "../repositories/message.repository";
-import {IConversation} from "../types/conversation.types";
-import {IMessage} from "../types/message.types";
-import {EFileTypes, firebaseStorageService} from "./firebaseStorage.service";
+import { getReceiverSocketId, io } from "../app";
+import { admin } from "../configs/firebase";
+import { ApiError } from "../errors/api.error";
+import { messageRepository } from "../repositories/message.repository";
+import { IConversation } from "../types/conversation.types";
+import { IMessage } from "../types/message.types";
+import { EFileTypes, firebaseStorageService } from "./firebaseStorage.service";
 
 class MessageService {
   public async sendMessage(
