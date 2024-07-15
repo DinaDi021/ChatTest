@@ -43,7 +43,7 @@ class UserMiddleware {
       const user = await userRepository.getOneByEmail({ email });
 
       if (!user) {
-        throw new ApiError("Email already exist", 409);
+        throw new ApiError("Email doesn't exist", 409);
       }
 
       req.res.locals.user = user;
