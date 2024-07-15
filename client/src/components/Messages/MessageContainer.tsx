@@ -3,28 +3,29 @@ import SendIcon from "@mui/icons-material/Send";
 import React, { useEffect, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { messagesActions, usersActions } from "../../redux";
+import { messagesActions } from "../../redux";
 import { NoChatSelected } from "./MessageInfo";
 import styles from "./MessageInfo/MessageInfo.module.scss";
 import { Messages } from "./Messages";
 
 const MessageContainer = () => {
   const { selectedUserChat } = useAppSelector((state) => state.users);
-  const { error } = useAppSelector((state) => state.messages);
+  const { error, editingMessage } = useAppSelector((state) => state.messages);
   const dispatch = useAppDispatch();
   const [messageText, setMessageText] = useState<string>("");
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 
   useEffect(() => {
-    dispatch(usersActions.resetSelectedChatWithUser());
-  }, []);
+    if (editingMessage) {
+      setMessageText(editingMessage.messageText);
+    }
+  }, [editingMessage]);
 
   const resetError = () => {
     if (error) {
       dispatch(messagesActions.resetError());
     }
   };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -41,12 +42,23 @@ const MessageContainer = () => {
     }
 
     if (selectedUserChat) {
-      await dispatch(
-        messagesActions.sendMessageById({
-          receiverId: selectedUserChat.id,
-          formData,
-        }),
-      );
+      if (editingMessage) {
+        await dispatch(
+          messagesActions.updateMessage({
+            conversationId: editingMessage.conversationId,
+            messageId: editingMessage.id,
+            formData,
+          }),
+        );
+        dispatch(messagesActions.setEditingMessage(null));
+      } else {
+        await dispatch(
+          messagesActions.sendMessageById({
+            receiverId: selectedUserChat.id,
+            formData,
+          }),
+        );
+      }
       setMessageText("");
       setSelectedFiles(null);
     }

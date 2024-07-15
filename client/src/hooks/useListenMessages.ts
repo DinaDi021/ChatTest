@@ -17,12 +17,18 @@ const useListenMessages = () => {
       dispatch(messagesActions.resetMessages(delMessage));
     };
 
+    const handleUpdatedMessage = (updatedMessage: string) => {
+      dispatch(messagesActions.setUpdateMessage(updatedMessage));
+    };
+
     socket?.on("newMessage", handleNewMessage);
     socket?.on("deletedMessage", handleDeletedMessage);
+    socket?.on("updatedMessage", handleUpdatedMessage);
 
     return () => {
       socket?.off("newMessage", handleNewMessage);
       socket?.off("deletedMessage", handleDeletedMessage);
+      socket?.off("updatedMessage", handleUpdatedMessage);
     };
   }, [socket, messages, dispatch, message]);
 };

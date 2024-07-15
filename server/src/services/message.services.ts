@@ -1,12 +1,12 @@
-import { UploadedFile } from "express-fileupload";
+import {UploadedFile} from "express-fileupload";
 
-import { getReceiverSocketId, io } from "../app";
-import { admin } from "../configs/firebase";
-import { ApiError } from "../errors/api.error";
-import { messageRepository } from "../repositories/message.repository";
-import { IConversation } from "../types/conversation.types";
-import { IMessage } from "../types/message.types";
-import { EFileTypes, firebaseStorageService } from "./firebaseStorage.service";
+import {getReceiverSocketId, io} from "../app";
+import {admin} from "../configs/firebase";
+import {ApiError} from "../errors/api.error";
+import {messageRepository} from "../repositories/message.repository";
+import {IConversation} from "../types/conversation.types";
+import {IMessage} from "../types/message.types";
+import {EFileTypes, firebaseStorageService} from "./firebaseStorage.service";
 
 class MessageService {
   public async sendMessage(
@@ -89,6 +89,43 @@ class MessageService {
     } catch (e) {
       throw new ApiError(e.message, e.status);
     }
+  }
+
+  public async updateMessage(
+    conversationId: string,
+    id: string,
+    receiverId: string,
+    senderId: string,
+    userId: string,
+    messageText?: string,
+    files?: UploadedFile[] | UploadedFile,
+  ): Promise<IMessage> {
+    this.checkUpdatePermission(userId, senderId);
+
+    const updatedFields: Partial<IMessage> = {
+      updatedAt: admin.firestore.Timestamp.now(),
+    };
+
+    if (messageText) {
+      updatedFields.messageText = messageText;
+    }
+
+    if (files) {
+      updatedFields.files = await this.createUrlFileForMessage(senderId, files);
+    }
+
+    const updatedMessage = await messageRepository.updateMessage(
+      conversationId,
+      id,
+      updatedFields,
+    );
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("updatedMessage", updatedMessage);
+    }
+
+    return updatedMessage;
   }
 
   public async deleteMessage(

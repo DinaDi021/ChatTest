@@ -39,7 +39,22 @@ class MessageController {
 
   public async updateMessage(req: Request, res: Response, next: NextFunction) {
     try {
-      // res.status().json();
+      const { messageText } = req.body;
+      const files = req.files.files as UploadedFile[];
+      const { senderId, conversationId, receiverId, id } =
+        req.res.locals.message;
+      const { userId } = req.res.locals.jwtPayload;
+
+      const updatedMessage = await messageService.updateMessage(
+        conversationId,
+        id,
+        receiverId,
+        senderId,
+        userId,
+        messageText,
+        files,
+      );
+      res.status(200).json({ data: updatedMessage });
     } catch (e) {
       next(e);
     }

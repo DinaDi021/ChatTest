@@ -1,6 +1,6 @@
-import { db } from "../configs/firebase";
-import { IConversation } from "../types/conversation.types";
-import { IMessage } from "../types/message.types";
+import {db} from "../configs/firebase";
+import {IConversation} from "../types/conversation.types";
+import {IMessage} from "../types/message.types";
 
 class MessageRepository {
   public async findConversation(
@@ -53,10 +53,9 @@ class MessageRepository {
       .doc(conversationId)
       .collection("messages");
     const messagesSnapshot = await messagesRef.get();
-    const messages: IMessage[] = messagesSnapshot.docs.map(
-      (doc) => doc.data() as IMessage,
+    return messagesSnapshot.docs.map(
+        (doc) => doc.data() as IMessage,
     );
-    return messages;
   }
 
   public async getMessageById(
@@ -70,6 +69,23 @@ class MessageRepository {
       .doc(messageId)
       .get();
     return messageDoc.data() as IMessage;
+  }
+
+  public async updateMessage(
+    conversationId: string,
+    messageId: string,
+    updatedFields: Partial<IMessage>,
+  ): Promise<IMessage> {
+    const messageRef = db
+      .collection("conversations")
+      .doc(conversationId)
+      .collection("messages")
+      .doc(messageId);
+
+    await messageRef.update(updatedFields);
+
+    const updatedMessage = await messageRef.get();
+    return updatedMessage.data() as IMessage;
   }
 
   public async deleteMessage(

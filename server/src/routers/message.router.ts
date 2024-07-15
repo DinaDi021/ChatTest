@@ -24,7 +24,7 @@ router.post(
 );
 
 router.patch(
-  "/change/:id",
+  "/:conversationId/:messageId",
   authMiddleware.checkAccessToken,
   messageMiddleware.getByIdOrThrow,
   fileMiddleware.isFileValid,

@@ -37,6 +37,10 @@ const MessageInfo: FC<IProps> = ({ messageInfo }) => {
     formattedDate = createdAtDate.toLocaleDateString("en-US");
   }
 
+  const handleEditMessage = () => {
+    dispatch(messagesActions.setEditingMessage(messageInfo));
+  };
+
   const handleDeleteMessage = async () => {
     dispatch(messagesActions.deleteMessage({ conversationId, messageId: id }));
   };
@@ -54,7 +58,10 @@ const MessageInfo: FC<IProps> = ({ messageInfo }) => {
         >
           <DeleteForeverIcon />
         </button>
-        <button style={{ padding: "5px", margin: "0" }}>
+        <button
+          onClick={handleEditMessage}
+          style={{ padding: "5px", margin: "0" }}
+        >
           <ModeEditIcon />
         </button>
       </div>

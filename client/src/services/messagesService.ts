@@ -10,8 +10,14 @@ const messagesService = {
     formData: FormData,
   ): IRes<IMessageData> =>
     apiService.post(urls.messages.send(receiverId), formData),
+  updateMessage: (
+    conversationId: string,
+    messageId: string,
+    formData: FormData,
+  ): IRes<IMessageData> =>
+    apiService.patch(urls.messages.action(conversationId, messageId), formData),
   deleteMessage: (conversationId: string, messageId: string): IRes<void> =>
-    apiService.delete(urls.messages.del(conversationId, messageId)),
+    apiService.delete(urls.messages.action(conversationId, messageId)),
 };
 
 export { messagesService };
