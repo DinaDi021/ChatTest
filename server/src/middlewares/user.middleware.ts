@@ -36,24 +36,22 @@ class UserMiddleware {
     }
   }
 
-  public async isUserExist() {
-    return async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const user = await userRepository.getOneByEmail({
-          email: req.body.email,
-        });
+  public async isUserExist(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email } = req.body;
 
-        if (!user) {
-          throw new ApiError("User not found", 404);
-        }
+      const user = await userRepository.getOneByEmail({ email });
 
-        req.res.locals.user = user;
-
-        next();
-      } catch (e) {
-        next(e);
+      if (!user) {
+        throw new ApiError("Email already exist", 409);
       }
-    };
+
+      req.res.locals.user = user;
+
+      next();
+    } catch (e) {
+      next(e);
+    }
   }
 }
 

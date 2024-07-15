@@ -40,7 +40,7 @@ router.put("/activate", authController.activate);
 router.post(
   "/forgot",
   commonMiddleware.isBodyValid(UserValidator.forgotPassword),
-  userMiddleware.getByIdOrThrow,
+  // userMiddleware.isUserExist,
   authController.forgotPassword,
 );
 
