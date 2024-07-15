@@ -44,7 +44,7 @@
 @mixin customInputStyles {
   border-radius: 9999px;
   outline: none;
-  color: var(--basic-black);
+  color:black;
   cursor: pointer;
   transition: background-color 0.5s ease-in-out 0s;
 

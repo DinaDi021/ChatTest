@@ -6,7 +6,8 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
-    padding: 20px;
+    padding: 10px 20px;
+    overflow-y: scroll;
 
     &__info {
       display: flex;
@@ -47,7 +48,10 @@
   }
 
   &__emailVerification {
-    margin-bottom: 15px;
+
+    p{
+      font-size: 15px;
+    }
   }
 }
 

@@ -2,7 +2,14 @@ import React from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { MainLayout } from "./layout";
-import { LoginPage, MainPage, NotFoundPage, RegisterPage } from "./pages";
+import {
+  ForgotPasswordPage,
+  LoginPage,
+  MainPage,
+  NotFoundPage,
+  RegisterPage,
+  ResetPasswordPage,
+} from "./pages";
 
 const router = createBrowserRouter([
   {
@@ -25,14 +32,14 @@ const router = createBrowserRouter([
         path: "register",
         element: <RegisterPage />,
       },
-      // {
-      //   path: "forgotPassword",
-      //   element: <ForgotPasswordPage />,
-      // },
-      // {
-      //   path: "resetPassword",
-      //   element: <ResetPasswordPage />,
-      // },
+      {
+        path: "forgotPassword",
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: "resetPassword",
+        element: <ResetPasswordPage />,
+      },
     ],
   },
   {

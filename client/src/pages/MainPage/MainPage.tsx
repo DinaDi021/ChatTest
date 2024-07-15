@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { Link } from "react-router-dom";
 
 import { MessageContainer, Sidebar } from "../../components";
 import { useAppSelector } from "../../hooks";
@@ -7,7 +8,13 @@ import styles from "../pages.module.scss";
 const MainPage: FC = () => {
   const { me } = useAppSelector((state) => state.auth);
   if (!me) {
-    return <div>You have to be auth</div>;
+    return (
+      <Link to={"/login"}>
+        <div className={styles.backTo}>
+          <button>You have to be auth</button>
+        </div>
+      </Link>
+    );
   }
 
   return (
