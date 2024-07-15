@@ -146,7 +146,6 @@ class AuthService {
   public async setForgotPassword(
     actionToken: string,
     newPassword: string,
-    res: any,
   ): Promise<void> {
     try {
       const payload = tokenService.checkActionToken(

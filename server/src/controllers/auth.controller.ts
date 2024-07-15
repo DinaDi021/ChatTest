@@ -13,8 +13,9 @@ class AuthController {
   ): Promise<Response<IUser>> {
     try {
       const createdUser = await authService.register(req.body, res);
+      const response = await UserPresenter.present(createdUser);
 
-      return res.json({ data: UserPresenter.present(createdUser) });
+      return res.json({ data: response });
     } catch (e) {
       next(e);
     }
@@ -80,8 +81,7 @@ class AuthController {
     next: NextFunction,
   ): Promise<Response<void>> {
     try {
-      const actionToken = req.cookies.actionToken;
-
+      const actionToken = req.params.actionToken;
       await authService.activate(actionToken);
 
       return res.sendStatus(204);
@@ -92,7 +92,8 @@ class AuthController {
 
   public async forgotPassword(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = req.body;
+      const user = req.res.locals.user;
+      console.log(user);
       await authService.forgotPassword(user as IUser, res);
 
       res.sendStatus(200);
@@ -110,7 +111,6 @@ class AuthController {
       await authService.setForgotPassword(
         req.cookies.actionToken,
         req.body.newPassword,
-        res,
       );
 
       res.sendStatus(200);

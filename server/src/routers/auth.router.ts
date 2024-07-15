@@ -30,17 +30,12 @@ router.post(
 
 router.post("/logout", authMiddleware.checkAccessToken, authController.logout);
 
-router.post(
-  "/activate",
-  authMiddleware.checkAccessToken,
-  authController.activate,
-);
-router.put("/activate", authController.activate);
+router.put("/activate/:actionToken", authController.activate);
 
 router.post(
   "/forgot",
   commonMiddleware.isBodyValid(UserValidator.forgotPassword),
-  // userMiddleware.isUserExist,
+  // userMiddleware.isUserEmailExist,
   authController.forgotPassword,
 );
 
