@@ -4,7 +4,7 @@ import { regex } from "../constants";
 
 const setPasswordSchema = Joi.object({
   password: Joi.string().regex(regex.PASSWORD).trim(),
-  confirm_Password: Joi.any().valid(Joi.ref("password")).required(),
+  confirmPassword: Joi.any().valid(Joi.ref("password")).required(),
 });
 
 const changePasswordSchema = Joi.object({

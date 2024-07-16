@@ -75,6 +75,22 @@ class AuthController {
     }
   }
 
+  public async sendActivationToken(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response<void>> {
+    try {
+      const tokenPayload = req.res.locals.jwtPayload as ITokenPayload;
+
+      await authService.sendActivationToken(tokenPayload, res);
+
+      return res.sendStatus(204);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   public async activate(
     req: Request,
     res: Response,

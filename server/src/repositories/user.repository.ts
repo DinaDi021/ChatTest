@@ -53,6 +53,19 @@ class UserRepository {
     return user as IUser;
   }
 
+  public async getOneByPhone(params: { phoneNumber: string }): Promise<IUser> {
+    const { phoneNumber } = params;
+    const querySnapshot = await db
+      .collection("users")
+      .where("phoneNumber", "==", phoneNumber)
+      .get();
+    if (querySnapshot.empty) {
+      return null;
+    }
+    const user = querySnapshot.docs[0].data() as IUser;
+    return user as IUser;
+  }
+
   public async setStatusForUser(
     userId: string,
     status: boolean,

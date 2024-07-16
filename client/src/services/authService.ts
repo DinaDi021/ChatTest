@@ -78,6 +78,10 @@ const authService = {
     });
   },
 
+  async getActivateEmail(): Promise<void> {
+    await apiService.post(urls.auth.sendActivate);
+  },
+
   async activateEmail(actionToken: string): Promise<void> {
     await apiService.put(urls.auth.activateAccount(actionToken));
   },

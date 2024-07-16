@@ -2,7 +2,7 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -22,6 +22,9 @@ const Account: FC = () => {
     me;
   const fileInput = useRef<HTMLInputElement>();
   const dispatch = useAppDispatch();
+  const [sendMessage, setSendMessage] = useState<boolean>(false);
+
+  console.log(emailVerified);
   const {
     value: isChangePasswordFormVisible,
     change: togglePasswordFormVisible,
@@ -69,6 +72,15 @@ const Account: FC = () => {
   const deleteAvatar = async () => {
     await dispatch(usersActions.deleteAvatar({ id }));
     await dispatch(authActions.me());
+  };
+
+  const handleSendEmailActivate = async () => {
+    const {
+      meta: { requestStatus },
+    } = await dispatch(authActions.sendActivateEmail());
+    if (requestStatus === "fulfilled") {
+      setSendMessage(true);
+    }
   };
 
   return (
@@ -157,11 +169,16 @@ const Account: FC = () => {
           {emailVerified ? (
             <p>Email verified - Account confirmed</p>
           ) : (
-            <p>Email not verified - Please verify your account</p>
+            <>
+              <button onClick={handleSendEmailActivate}>
+                Please verify your account
+              </button>
+              {sendMessage && <p>Check your email</p>}
+            </>
           )}
         </div>
       </div>
-      <div className={styles.user__container__action}>
+      <div>
         <div
           className={
             isChangePasswordFormVisible
@@ -171,12 +188,14 @@ const Account: FC = () => {
         >
           <ChangePasswordForm />
         </div>
-        <button onClick={togglePasswordFormVisible}>
-          {isChangePasswordFormVisible
-            ? "Hide Change Password Form"
-            : "Change password"}
-        </button>
-        <button onClick={deleteAccount}>Delete account</button>
+        <div className={styles.user__container__action}>
+          <button onClick={togglePasswordFormVisible}>
+            {isChangePasswordFormVisible
+              ? "Hide Change Password Form"
+              : "Change password"}
+          </button>
+          <button onClick={deleteAccount}>Delete account</button>
+        </div>
       </div>
     </div>
   );

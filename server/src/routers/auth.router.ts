@@ -12,6 +12,7 @@ router.post(
   "/register",
   commonMiddleware.isBodyValid(UserValidator.registerUser),
   emailMiddleware.isEmailUniq,
+  emailMiddleware.isPhoneNumberUniq,
   authController.register,
 );
 router.post(
@@ -30,6 +31,11 @@ router.post(
 
 router.post("/logout", authMiddleware.checkAccessToken, authController.logout);
 
+router.post(
+  "/activate",
+  authMiddleware.checkAccessToken,
+  authController.sendActivationToken,
+);
 router.put("/activate/:actionToken", authController.activate);
 
 router.post(

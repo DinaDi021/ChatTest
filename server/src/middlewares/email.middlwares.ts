@@ -53,6 +53,24 @@ class EmailMiddleware {
       next(e);
     }
   }
+
+  public async isPhoneNumberUniq(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const { phoneNumber } = req.body;
+      const user = await userRepository.getOneByPhone({ phoneNumber });
+      if (user) {
+        throw new ApiError("PhoneNumber already exist", 409);
+      }
+
+      next();
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export const emailMiddleware = new EmailMiddleware();

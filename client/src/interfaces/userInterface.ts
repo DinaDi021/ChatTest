@@ -24,4 +24,5 @@ export interface IUpdateProfileParams {
   firstName?: string;
   lastName?: string;
   phoneNumber?: string;
+  emailVerified?: boolean;
 }

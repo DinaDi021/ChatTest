@@ -45,6 +45,15 @@
         opacity: 0.7;
       }
     }
+
+    &__action {
+      display: flex;
+      justify-content: space-between;
+
+      button{
+        width: 40%;
+      }
+    }
   }
 
   &__emailVerification {

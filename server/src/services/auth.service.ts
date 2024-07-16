@@ -8,7 +8,6 @@ import { IUser, IUserCredentials } from "../types/users.types";
 import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
-import { userService } from "./user.services";
 
 class AuthService {
   public async register(dto: IUser, res: any): Promise<IUser> {
@@ -108,6 +107,32 @@ class AuthService {
         secure: true,
         sameSite: "none",
         expires: new Date(1),
+      });
+    } catch (e) {
+      throw new ApiError(e.message, e.status);
+    }
+  }
+
+  public async sendActivationToken(
+    tokenPayload: ITokenPayload,
+    res: any,
+  ): Promise<void> {
+    try {
+      const user = await userRepository.getUserById(tokenPayload.userId);
+      if (user.emailVerified) {
+        throw new ApiError("User can not be activated twice", 403);
+      }
+
+      const actionToken = tokenService.generateActionToken(
+        {
+          userId: user.id,
+        },
+        EActionTokenType.activate,
+      );
+      tokenService.setActionTokenCookie(res, actionToken);
+      await emailService.sendMail(user.email, EEmailAction.REGISTER, {
+        name: user.firstName,
+        actionToken,
       });
     } catch (e) {
       throw new ApiError(e.message, e.status);

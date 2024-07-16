@@ -102,6 +102,18 @@ const setForgotPassword = createAsyncThunk<
   },
 );
 
+const sendActivateEmail = createAsyncThunk<void>(
+  "authSlice/sendActivateEmail",
+  async (_, { rejectWithValue }) => {
+    try {
+      await authService.getActivateEmail();
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
 const activateEmail = createAsyncThunk<void, { actionToken: string }>(
   "authSlice/activateEmail",
   async ({ actionToken }, { rejectWithValue }) => {
@@ -148,6 +160,9 @@ const authSlice = createSlice({
       .addCase(me.fulfilled, (state, action) => {
         state.me = action.payload;
       })
+      .addCase(activateEmail.fulfilled, (state) => {
+        state.me.emailVerified = true;
+      })
       .addCase(logout.fulfilled, (state) => {
         state.me = null;
       })
@@ -173,6 +188,7 @@ const authActions = {
   logout,
   forgotPassword,
   setForgotPassword,
+  sendActivateEmail,
   activateEmail,
   changePassword,
 };

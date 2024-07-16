@@ -1,3 +1,4 @@
+import { joiResolver } from "@hookform/resolvers/joi";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import React, { FC } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -6,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../hooks";
 import { IResetPassword } from "../../../interfaces";
 import { authActions } from "../../../redux";
+import { setPasswordSchema } from "../../../validators";
 import styles from "./Form.module.scss";
 
 const ResetPasswordForm: FC = () => {
@@ -14,7 +16,9 @@ const ResetPasswordForm: FC = () => {
     reset,
     handleSubmit,
     formState: { errors },
-  } = useForm<IResetPassword>();
+  } = useForm<IResetPassword>({
+    resolver: joiResolver(setPasswordSchema),
+  });
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
