@@ -49,7 +49,8 @@ class UserRepository {
     if (querySnapshot.empty) {
       return null;
     }
-    return querySnapshot.docs[0].data() as IUser;
+    const user = querySnapshot.docs[0].data() as IUser;
+    return user as IUser;
   }
 
   public async setStatusForUser(

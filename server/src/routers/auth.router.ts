@@ -35,12 +35,11 @@ router.put("/activate/:actionToken", authController.activate);
 router.post(
   "/forgot",
   commonMiddleware.isBodyValid(UserValidator.forgotPassword),
-  // userMiddleware.isUserEmailExist,
   authController.forgotPassword,
 );
 
 router.put(
-  "/forgot/:token",
+  "/forgot/:actionToken",
   commonMiddleware.isBodyValid(UserValidator.setForgotPassword),
   authController.setForgotPassword,
 );

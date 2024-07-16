@@ -9,7 +9,7 @@ export interface IAuth {
 
 export interface IResetPassword
   extends Pick<IAuth, "password" | "confirmPassword"> {
-  token: string;
+  actionToken: string;
 }
 
 export interface IChangePassword {

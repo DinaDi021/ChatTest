@@ -13,7 +13,8 @@ const urls = {
     logout: `${auth}/logout`,
     logoutAll: `${auth}/logout-all`,
     forgotPassword: `${auth}/forgot`,
-    setForgotPassword: (token: string): string => `${auth}/forgot/${token}`,
+    setForgotPassword: (actionToken: string): string =>
+      `${auth}/forgot/${actionToken}`,
     changePassword: `${auth}/change`,
     activateAccount: (actionToken: string): string =>
       `${auth}/activate/${actionToken}`,

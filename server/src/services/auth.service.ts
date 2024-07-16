@@ -8,6 +8,7 @@ import { IUser, IUserCredentials } from "../types/users.types";
 import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
+import { userService } from "./user.services";
 
 class AuthService {
   public async register(dto: IUser, res: any): Promise<IUser> {
@@ -125,8 +126,9 @@ class AuthService {
     }
   }
 
-  public async forgotPassword(user: IUser, res: any): Promise<void> {
+  public async forgotPassword(email: string, res: any): Promise<void> {
     try {
+      const user = await userService.findUserByEmail(email);
       const actionToken = tokenService.generateActionToken(
         {
           userId: user.id,

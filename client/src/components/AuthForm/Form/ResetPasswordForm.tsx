@@ -1,7 +1,7 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import React, { FC } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useAppDispatch } from "../../../hooks";
 import { IResetPassword } from "../../../interfaces";
@@ -18,17 +18,14 @@ const ResetPasswordForm: FC = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
-  console.log(token);
+  const { actionToken } = useParams();
 
   const resetPassword: SubmitHandler<IResetPassword> = async (newPassword) => {
     const { password } = newPassword;
-    console.log(token, password);
     const {
       meta: { requestStatus },
     } = await dispatch(
-      authActions.setForgotPassword({ token: token, newPassword: password }),
+      authActions.setForgotPassword({ actionToken, newPassword: password }),
     );
 
     if (requestStatus === "fulfilled") {

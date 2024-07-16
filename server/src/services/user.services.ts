@@ -73,6 +73,14 @@ class UserService {
     }
     throw new ApiError("You do not have permission to manage this user", 403);
   }
+
+  public async findUserByEmail(email: string): Promise<IUser> {
+    const user = await userRepository.getOneByEmail({ email });
+    if (!user) {
+      throw new ApiError("Email doesn't exist", 409);
+    }
+    return user;
+  }
 }
 
 export const userService = new UserService();

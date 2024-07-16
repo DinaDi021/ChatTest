@@ -89,12 +89,12 @@ const forgotPassword = createAsyncThunk<void, { email: string }>(
 
 const setForgotPassword = createAsyncThunk<
   void,
-  { token: string; newPassword: string }
+  { actionToken: string; newPassword: string }
 >(
   "authSlice/setForgotPassword",
-  async ({ token, newPassword }, { rejectWithValue }) => {
+  async ({ actionToken, newPassword }, { rejectWithValue }) => {
     try {
-      await authService.setForgotPassword(token, newPassword);
+      await authService.setForgotPassword(actionToken, newPassword);
     } catch (e) {
       const err = e as AxiosError;
       return rejectWithValue(err.response.data);

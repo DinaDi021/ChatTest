@@ -57,8 +57,13 @@ const authService = {
     await apiService.post(urls.auth.forgotPassword, { email });
   },
 
-  async setForgotPassword(token: string, newPassword: string): Promise<void> {
-    await apiService.put(urls.auth.forgotPassword, { token, newPassword });
+  async setForgotPassword(
+    actionToken: string,
+    newPassword: string,
+  ): Promise<void> {
+    await apiService.put(urls.auth.setForgotPassword(actionToken), {
+      newPassword,
+    });
   },
 
   async changePassword(

@@ -92,9 +92,8 @@ class AuthController {
 
   public async forgotPassword(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = req.res.locals.user;
-      console.log(user);
-      await authService.forgotPassword(user as IUser, res);
+      const email = req.body.email;
+      await authService.forgotPassword(email, res);
 
       res.sendStatus(200);
     } catch (e) {
@@ -109,7 +108,7 @@ class AuthController {
   ) {
     try {
       await authService.setForgotPassword(
-        req.cookies.actionToken,
+        req.params.actionToken,
         req.body.newPassword,
       );
 
