@@ -13,22 +13,7 @@ class UserMiddleware {
         throw new ApiError("User not found", 404);
       }
 
-      req.res.locals = user;
-
-      next();
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  public async isEmailUniq(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { email } = req.body;
-
-      const user = await userRepository.getOneByEmail({ email });
-      if (user) {
-        throw new ApiError("Email already exist", 409);
-      }
+      req.res.locals.user = user;
 
       next();
     } catch (e) {

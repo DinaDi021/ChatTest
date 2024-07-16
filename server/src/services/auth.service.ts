@@ -126,9 +126,8 @@ class AuthService {
     }
   }
 
-  public async forgotPassword(email: string, res: any): Promise<void> {
+  public async forgotPassword(user: IUser, res: any): Promise<void> {
     try {
-      const user = await userService.findUserByEmail(email);
       const actionToken = tokenService.generateActionToken(
         {
           userId: user.id,

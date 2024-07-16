@@ -3,7 +3,7 @@ import { Router } from "express";
 import { authController } from "../controllers/auth.controller";
 import { authMiddleware } from "../middlewares/auth.middlewares";
 import { commonMiddleware } from "../middlewares/common.middleware";
-import { userMiddleware } from "../middlewares/user.middleware";
+import { emailMiddleware } from "../middlewares/email.middlwares";
 import { UserValidator } from "../validators/user.validator";
 
 const router = Router();
@@ -11,7 +11,7 @@ const router = Router();
 router.post(
   "/register",
   commonMiddleware.isBodyValid(UserValidator.registerUser),
-  userMiddleware.isEmailUniq,
+  emailMiddleware.isEmailUniq,
   authController.register,
 );
 router.post(
@@ -35,6 +35,7 @@ router.put("/activate/:actionToken", authController.activate);
 router.post(
   "/forgot",
   commonMiddleware.isBodyValid(UserValidator.forgotPassword),
+  emailMiddleware.isEmailExist,
   authController.forgotPassword,
 );
 
