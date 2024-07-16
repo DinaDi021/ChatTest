@@ -11,7 +11,6 @@ const urls = {
     login: `${auth}/login`,
     refresh: `${auth}/refresh`,
     logout: `${auth}/logout`,
-    logoutAll: `${auth}/logout-all`,
     forgotPassword: `${auth}/forgot`,
     setForgotPassword: (actionToken: string): string =>
       `${auth}/forgot/${actionToken}`,

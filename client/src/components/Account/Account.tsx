@@ -24,7 +24,6 @@ const Account: FC = () => {
   const dispatch = useAppDispatch();
   const [sendMessage, setSendMessage] = useState<boolean>(false);
 
-  console.log(emailVerified);
   const {
     value: isChangePasswordFormVisible,
     change: togglePasswordFormVisible,

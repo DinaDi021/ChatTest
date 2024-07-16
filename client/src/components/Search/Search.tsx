@@ -29,8 +29,6 @@ const Search: FC<IProps> = ({ onError }) => {
           c.lastName.toLowerCase().includes(search.toLowerCase()),
       );
 
-      console.log(conversation);
-
       if (conversation) {
         dispatch(usersActions.selectedChatWithUser(conversation));
         setSearch("");

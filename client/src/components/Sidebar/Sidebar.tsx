@@ -4,7 +4,7 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import React, { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAppDispatch, useToggle } from "../../hooks";
+import { useAppDispatch, useAppSelector, useToggle } from "../../hooks";
 import { authActions } from "../../redux";
 import { Account } from "../Account";
 import { Conversations } from "../Conversations";
@@ -15,7 +15,7 @@ const Sidebar: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [searchError, setSearchError] = useState<string | null>(null);
-
+  const { isChatOpen } = useAppSelector((state) => state.messages);
   const { value: showPersonalAccount, change: togglePersonalAccount } =
     useToggle(false);
 
@@ -29,7 +29,9 @@ const Sidebar: FC = () => {
   };
 
   return (
-    <div className={styles.sidebar__container}>
+    <div
+      className={`${styles.sidebar__container} ${isChatOpen ? styles.close : styles.open}`}
+    >
       {showPersonalAccount ? (
         <Account />
       ) : (

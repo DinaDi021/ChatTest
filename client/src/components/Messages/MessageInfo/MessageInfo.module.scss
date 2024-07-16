@@ -26,6 +26,7 @@
     width: 65%;
 
     &__header {
+      position: relative;
       width: calc(100% - 20px);
       padding: 0 10px;
       display: flex;
@@ -106,6 +107,20 @@
       left: 32%;
       top: 32%;
       color: darkred;
+    }
+  }
+
+  &__button {
+    &__back {
+      display: none;
+      position: absolute;
+      left: 90%;
+      cursor: pointer;
+      transition: transform 0.5s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
 
@@ -216,6 +231,37 @@
       background-color: rgba(119, 136, 153, 0.3);
       color: white;
       border-radius: 1rem;
+    }
+  }
+}
+
+
+
+
+
+@media screen and (max-width: 650px) {
+  .close {
+    width: 0;
+    opacity: 0;
+  }
+
+  .open {
+    width: 100%;
+    opacity: 1;
+  }
+  .message {
+    &__button {
+      &__back {
+        display: block;
+      }
+    }
+    &__sent {
+      &__input {
+        width: 70%;
+      }
+      &__svg {
+        right: 20%;
+      }
     }
   }
 }

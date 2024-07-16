@@ -13,6 +13,7 @@
 
     &__input {
       @include customInputStyles;
+      width: calc(100% - 40px);
       padding: 10px 20px;
       background-color: white;
       border: 1px solid transparent;

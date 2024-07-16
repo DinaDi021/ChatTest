@@ -1,6 +1,7 @@
 import AttachFileIcon from "@mui/icons-material/AttachFile";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import SendIcon from "@mui/icons-material/Send";
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { messagesActions } from "../../redux";
@@ -8,9 +9,11 @@ import { NoChatSelected } from "./MessageInfo";
 import styles from "./MessageInfo/MessageInfo.module.scss";
 import { Messages } from "./Messages";
 
-const MessageContainer = () => {
+const MessageContainer: FC = () => {
   const { selectedUserChat } = useAppSelector((state) => state.users);
-  const { error, editingMessage } = useAppSelector((state) => state.messages);
+  const { error, editingMessage, isChatOpen } = useAppSelector(
+    (state) => state.messages,
+  );
   const dispatch = useAppDispatch();
   const [messageText, setMessageText] = useState<string>("");
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
@@ -20,6 +23,12 @@ const MessageContainer = () => {
       setMessageText(editingMessage.messageText);
     }
   }, [editingMessage]);
+
+  useEffect(() => {
+    if (selectedUserChat && window.innerWidth <= 650) {
+      dispatch(messagesActions.chahgeIsChatOpen());
+    }
+  }, [selectedUserChat]);
 
   const resetError = () => {
     if (error) {
@@ -64,17 +73,29 @@ const MessageContainer = () => {
     }
   };
 
+  const toggleChat = () => {
+    dispatch(messagesActions.chahgeIsChatOpen());
+  };
+
   return (
     <>
       {!selectedUserChat ? (
         <NoChatSelected />
       ) : (
-        <div className={styles.message__page}>
+        <div
+          className={`${styles.message__page} ${isChatOpen ? styles.open : styles.close}`}
+        >
           <div className={styles.message__page__header}>
             <span>To:</span>
             <span className={styles.message__page__nameFor}>
               {selectedUserChat.firstName} {selectedUserChat.lastName}
             </span>
+            <div
+              className={` ${styles.message__button__back} ${isChatOpen ? styles.open : styles.close}`}
+              onClick={toggleChat}
+            >
+              <KeyboardBackspaceIcon />
+            </div>
           </div>
           <div className={styles.message__page__body}>
             <Messages />

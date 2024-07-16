@@ -1,8 +1,10 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import fileUpload from "express-fileupload";
-import http from "http";
+import https from "http";
+import path from "path";
 import { Server } from "socket.io";
 
 import { configs } from "./configs/configs";
@@ -12,8 +14,10 @@ import { messageRouter } from "./routers/message.router";
 import { userRouter } from "./routers/user.router";
 import { UserSocketMap } from "./types/userSocketMap";
 
+dotenv.config();
+
 const app = express();
-const server = http.createServer(app);
+const server = https.createServer(app);
 export const io = new Server(server, {
   cors: {
     origin: configs.FRONT_URL,
@@ -72,6 +76,12 @@ app.use((error: ApiError, req: Request, res: Response, next: NextFunction) => {
     message: error.message,
     status: error.status,
   });
+});
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
 server.listen(configs.PORT, async () => {

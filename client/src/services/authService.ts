@@ -48,11 +48,6 @@ const authService = {
     this.deleteTokens();
   },
 
-  async logoutAll(): Promise<void> {
-    await apiService.post(urls.auth.logoutAll);
-    this.deleteTokens();
-  },
-
   async forgotPassword(email: string): Promise<void> {
     await apiService.post(urls.auth.forgotPassword, { email });
   },

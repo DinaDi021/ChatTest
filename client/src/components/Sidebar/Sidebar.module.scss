@@ -32,3 +32,13 @@
   }
 }
 
+@media screen and (max-width: 650px) {
+  .open, {
+    width: 100%;
+    opacity: 1;
+  }
+  .close {
+    width: 0;
+    opacity: 0;
+  }
+}

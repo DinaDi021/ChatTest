@@ -22,6 +22,7 @@ interface IState {
     email?: string[];
     message?: string;
   };
+  isChatOpen: boolean;
 }
 
 const initialState: IState = {
@@ -29,6 +30,7 @@ const initialState: IState = {
   message: null,
   editingMessage: null,
   error: null,
+  isChatOpen: false,
 };
 
 const getMessagesById = createAsyncThunk<
@@ -126,6 +128,9 @@ const messagesSlice = createSlice({
     },
     resetError: (state) => {
       state.error = null;
+    },
+    chahgeIsChatOpen: (state) => {
+      state.isChatOpen = !state.isChatOpen;
     },
   },
   extraReducers: (build) =>

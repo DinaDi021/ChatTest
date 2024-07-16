@@ -1,4 +1,4 @@
-.env
+client/.env
 /server/node_modules
 /server/dist/
 /server/src/serviceAccount.json

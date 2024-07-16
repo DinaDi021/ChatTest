@@ -61,17 +61,13 @@ const me = createAsyncThunk<IUser, void>(
 
 const logout = createAsyncThunk<void, void>(
   "authSlice/logout",
-  async (_, { dispatch }) => {
-    await authService.logout();
-    dispatch(authActions.resetUser());
-  },
-);
-
-const logoutAll = createAsyncThunk<void, void>(
-  "authSlice/logoutAll",
-  async (_, { dispatch }) => {
-    await authService.logoutAll();
-    dispatch(authActions.resetUser());
+  async (_, { rejectWithValue }) => {
+    try {
+      await authService.logout();
+    } catch (e) {
+      const err = e as AxiosError;
+      return rejectWithValue(err.response.data);
+    }
   },
 );
 
@@ -166,9 +162,6 @@ const authSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.me = null;
       })
-      .addCase(logoutAll.fulfilled, (state) => {
-        state.me = null;
-      })
       .addMatcher(isRejected(), (state, action) => {
         state.error = action.payload;
       })
@@ -184,7 +177,6 @@ const authActions = {
   register,
   login,
   me,
-  logoutAll,
   logout,
   forgotPassword,
   setForgotPassword,
