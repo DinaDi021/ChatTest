@@ -34,6 +34,12 @@
       }
     }
 
+    &__title {
+      h3{
+        text-align: center;
+      }
+    }
+
     &__formRecover {
       width: 80%;
     }
@@ -136,13 +142,13 @@
       flex-direction: column;
       height: inherit;
 
-      &__forgot {
-
-      }
     }
     &__page{
+      justify-content: center;
+
+
       &__title {
-        width: calc(100% - 30px);
+        width: 50%;
         height: 40%;
       }
       &__form {
